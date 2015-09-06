@@ -2,7 +2,7 @@ package tmedia_ltd.foodalarm;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
-import android.widget.LinearLayout.LayoutParams;
+import android.widget.RelativeLayout.LayoutParams;
 
 /**
  * This animation class is animating the expanding and reducing the size of a view.

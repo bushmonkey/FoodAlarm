@@ -30,12 +30,13 @@ public class CustomItemAdapter extends ArrayAdapter<ItemArray> {
         }
 
         CheckBox ItemCheckbox= (CheckBox)  convertView.findViewById(R.id.ItemCheckBox);
+        final View toolbar = convertView.findViewById(R.id.toolbar);
 
         ItemCheckbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
-                View toolbar = v.findViewById(R.id.toolbar);
+
 
                 // Creating the expand animation for the item
                 ExpandableAnimation expandAni = new ExpandableAnimation(toolbar, 500);
