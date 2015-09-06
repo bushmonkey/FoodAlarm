@@ -5,7 +5,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:screenOrientation="portrait"
-    android:background="#f4f4f4"
+    android:background="@drawable/background"
     tools:context="${packageName}.${activityClass}"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
