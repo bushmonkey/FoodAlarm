@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:screenOrientation="portrait"
+    android:padding="8dp"
+    android:background="#ffffff"
+>
+    <!--
+    <TextView android:id="@+id/title"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
+        android:textSize="10sp"
+        />
+        -->
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ItemCheckBox" />
+
+    <TextView
+        android:id="@+id/lblListItem"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="10sp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"
+        android:layout_toEndOf="@id/ItemCheckBox" />
+
+    <LinearLayout android:id="@+id/toolbar"
+        android:layout_marginBottom="-22dip"
+        android:visibility="gone"
+        android:layout_height="22dip"
+        android:layout_width="fill_parent"
+        android:layout_below="@+id/ItemCheckBox"
+        android:gravity="right"
+        android:background="#cab5b0">
+        <Button android:id="@+id/doSomething1"
+            android:layout_height="@dimen/item_button_height"
+            android:layout_width="@dimen/item_button_width"
+            android:textSize="10sp"
+            android:text="Used"
+            android:gravity="center" />
+        <Button android:id="@+id/doSomething2"
+            android:layout_height="@dimen/item_button_height"
+            android:layout_width="@dimen/item_button_width"
+            android:textSize="10sp"
+            android:text="Wasted"
+            android:gravity="center" />
+    </LinearLayout>
+</RelativeLayout>
