@@ -1,6 +1,6 @@
 package tmedia_ltd.foodalarm;
 
-import android.app.ListActivity;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class FoodSummary extends ListActivity {
+public class FoodSummary extends Activity {
 //public class FoodSummary extends Activity {
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
@@ -76,14 +76,25 @@ public class FoodSummary extends ListActivity {
     }
 
     public void usedClick (View v) {
-            ListView lv = getListView();
+            ListView lv = (ListView) findViewById(R.id.lvUsers);
             int position = lv.getPositionForView(v);
             ItemArray.RemoveItem(position);
         Toast.makeText(
                 getApplicationContext(),
-                "Item used", Toast.LENGTH_SHORT)
+                position+" Item used", Toast.LENGTH_SHORT)
                 .show();
             adapter.notifyDataSetChanged();
+    }
+
+    public void wastedClick (View v) {
+        ListView lv = (ListView) findViewById(R.id.lvUsers);
+        int position = lv.getPositionForView(v);
+        ItemArray.RemoveItem(position);
+        Toast.makeText(
+                getApplicationContext(),
+                "Item wasted", Toast.LENGTH_SHORT)
+                .show();
+        adapter.notifyDataSetChanged();
     }
 
     private void prepareListData() {

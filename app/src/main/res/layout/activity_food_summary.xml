@@ -57,11 +57,11 @@
             android:layout_marginTop="10dp" />
 -->
 
-          <ListView android:id="@+id/lvUsers"
-              android:layout_height="match_parent"
-              android:layout_width="match_parent"
-              android:layout_below="@+id/TitleView"
-              />
+    <ListView android:id="@+id/lvUsers"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/TitleView"
+        />
 
 
       </RelativeLayout>
