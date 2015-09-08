@@ -17,11 +17,17 @@ public class ItemArray {
         return users;
     }
 
-    public static ArrayList<ItemArray> AddItem(ArrayList<ItemArray> NewItem)
+   // public static ArrayList<ItemArray> AddItem(ArrayList<ItemArray> NewItem)
+   public static ArrayList<ItemArray> AddItem(String NewItem)
     {
-        users.add(new ItemArray("Harry", "San Diego"));
-        users.add(new ItemArray("Marla", "San Francisco"));
-        users.add(new ItemArray("Sarah", "San Marco"));
+        users.add(new ItemArray(NewItem, "San Diego"));
+        return users;
+    }
+
+    public static ArrayList<ItemArray> RemoveItem(int DeletedItem)
+    {
+        users.remove(DeletedItem);
+        //users.add(new ItemArray(NewItem, "San Diego"));
         return users;
     }
 }

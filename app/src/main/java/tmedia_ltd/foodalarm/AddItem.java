@@ -1,16 +1,42 @@
 package tmedia_ltd.foodalarm;
 
-import android.support.v7.app.AppCompatActivity;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
-public class AddItem extends AppCompatActivity {
+import java.util.Date;
+
+public class AddItem extends Activity {
+    TextView mainTextView;
+    Button saveButton;
+    Button newItemButton;
+    String productNameTxt = new String();
+    Date ExpiryDateValue = new Date();
+    EditText ProductNameEt;
+    EditText mDateEntryField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
+        // mainTextView = (TextView) findViewById(R.id.InfoText)
+        newItemButton = (Button) findViewById(R.id.NewBtn);
+        //newItemButton.setOnClickListener(this);
+        ProductNameEt = (EditText) findViewById(R.id.ProductNameText);
+        mDateEntryField = (EditText) findViewById(R.id.ExpiryDatePicker);
+        mDateEntryField.addTextChangedListener(mDateEntryWatcher);
+
+        saveButton = (Button) findViewById(R.id.UpdateDetailsBtn);
+        saveButton.setOnClickListener(onSave);
     }
 
     @Override
@@ -19,6 +45,63 @@ public class AddItem extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_add_item, menu);
         return true;
     }
+
+    private TextWatcher mDateEntryWatcher = new TextWatcher() {
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            String working = s.toString();
+            boolean isValid = true;
+            if (working.length()==2 && before ==0) {
+                if (Integer.parseInt(working) < 1 || Integer.parseInt(working)>31) {
+                    isValid = false;
+                } else {
+                    working+="/";
+                    mDateEntryField.setText(working);
+                    mDateEntryField.setSelection(working.length());
+                }
+            }
+            else if (working.length()==5 && before ==0) {
+                String enteredMonth = working.substring(3);
+                if (Integer.parseInt(enteredMonth) < 1 || Integer.parseInt(enteredMonth)>12) {
+                    isValid = false;
+                } else {
+                    working+="/20";
+                    mDateEntryField.setText(working);
+                    mDateEntryField.setSelection(working.length());
+                }
+            }
+            else if (working.length()==10 && before ==0) {
+                String enteredYear = working.substring(6);
+                //int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+                //if (Integer.parseInt(enteredYear) < currentYear) {
+               //     isValid = false;
+                //}
+               // else {
+                    isValid = true;
+                    //working+="/";
+                    mDateEntryField.setText(working);
+                    mDateEntryField.setSelection(working.length());
+                //}
+            } else if (working.length()!=10) {
+                isValid = false;
+            }
+
+            if (!isValid) {
+                mDateEntryField.setError("Enter a valid date: dd/MM/YYYY");
+            } else {
+                mDateEntryField.setError(null);
+            }
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {}
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+    };
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -34,4 +117,24 @@ public class AddItem extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void BackToSummary (View v) {
+        Intent myIntent=new Intent(v.getContext(),FoodSummary.class );
+        startActivityForResult(myIntent,0);
+    }
+
+
+    private View.OnClickListener onSave=new View.OnClickListener()
+    {
+        @Override
+        public void onClick(View view) {
+            //Date ExpiryDatePickerText = ExpiryDatePickerEt.();
+            String ProductText = ProductNameEt.getText().toString();
+            ItemArray.AddItem(ProductText);
+            Toast.makeText(
+                    getApplicationContext(),
+                    "Item saved", Toast.LENGTH_SHORT)
+                    .show();
+        }
+    };
 }

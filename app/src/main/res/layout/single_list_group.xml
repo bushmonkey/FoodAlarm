@@ -61,20 +61,21 @@
         android:gravity="right"
         android:background="#cab5b0"
         android:layout_alignParentRight="true">
-        <Button android:id="@+id/doSomething1"
+        <Button android:id="@+id/usedButton"
             android:layout_height="fill_parent"
             android:layout_width="50dp"
             android:textSize="10sp"
             android:text="Used"
             android:gravity="center"
-            android:background="#7ed267"/>
-        <Button android:id="@+id/doSomething2"
+            android:background="#7ed267"
+            android:onClick="usedClick"/>
+        <Button android:id="@+id/wastedButton"
             android:layout_height="fill_parent"
             android:layout_width="50dp"
             android:textSize="10sp"
             android:text="Wasted"
             android:background="#ff6761"
             android:gravity="center"
-            android:layout_toEndOf="@id/doSomething1"/>
+            android:layout_toEndOf="@id/usedButton"/>
     </RelativeLayout>
 </RelativeLayout>

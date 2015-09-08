@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -14,9 +15,10 @@ import java.util.ArrayList;
  * Created by will on 9/4/2015.
  */
 
+//public class CustomItemAdapter extends ArrayAdapter<ItemArray> {
 public class CustomItemAdapter extends ArrayAdapter<ItemArray> {
 
-    public CustomItemAdapter(Context context, ArrayList<ItemArray> users) {
+    public CustomItemAdapter(final Context context, final ArrayList<ItemArray> users) {
         super(context, 0, users);
     }
 
@@ -34,8 +36,7 @@ public class CustomItemAdapter extends ArrayAdapter<ItemArray> {
 
         ItemCheckbox.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
 
 
                 // Creating the expand animation for the item
@@ -45,7 +46,11 @@ public class CustomItemAdapter extends ArrayAdapter<ItemArray> {
                 toolbar.startAnimation(expandAni);
             }
 
+
         });
+
+        Button UsedButton= (Button)  convertView.findViewById(R.id.usedButton);
+
 
         // Lookup view for data population
         TextView tvName = (TextView) convertView.findViewById(R.id.lblListItem);
