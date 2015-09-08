@@ -11,8 +11,14 @@ public class ItemArray {
         this.hometown = hometown;
     }
 
+    static ArrayList<ItemArray> users = new ArrayList<ItemArray>();
+
     public static ArrayList<ItemArray> getUsers() {
-        ArrayList<ItemArray> users = new ArrayList<ItemArray>();
+        return users;
+    }
+
+    public static ArrayList<ItemArray> AddItem(ArrayList<ItemArray> NewItem)
+    {
         users.add(new ItemArray("Harry", "San Diego"));
         users.add(new ItemArray("Marla", "San Francisco"));
         users.add(new ItemArray("Sarah", "San Marco"));

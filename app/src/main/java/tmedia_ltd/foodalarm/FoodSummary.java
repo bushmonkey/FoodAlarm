@@ -1,17 +1,19 @@
 package tmedia_ltd.foodalarm;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class FoodSummary extends Activity {
+public class FoodSummary extends Activity  {
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
     List<String> listDataHeader;
@@ -21,6 +23,9 @@ public class FoodSummary extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_summary);
+
+        TextView submit=(TextView)findViewById(R.id.textView);
+        submit.setOnClickListener(onSubmit);
 
         populateItemList();
 
@@ -124,7 +129,8 @@ public class FoodSummary extends Activity {
 
     private void populateItemList() {
         // Construct the data source
-        ArrayList<ItemArray> arrayOfUsers = ItemArray.getUsers();
+        ArrayList<ItemArray> arrayOfUsers = new ArrayList<ItemArray>();
+        arrayOfUsers=ItemArray.AddItem(arrayOfUsers);
         // Create the adapter to convert the array to views
         CustomItemAdapter adapter = new CustomItemAdapter(this, arrayOfUsers);
         // Attach the adapter to a ListView
@@ -170,4 +176,14 @@ public class FoodSummary extends Activity {
         listDataChild.put(listDataHeader.get(1), nowShowing);
         listDataChild.put(listDataHeader.get(2), comingSoon);
     }
+
+    private View.OnClickListener onSubmit=new View.OnClickListener() {
+
+        @Override
+        public void onClick(View view) {
+            Intent myIntent=new Intent(view.getContext(),DetailsCapture.class );
+            startActivityForResult(myIntent,0);
+
+        }
+    };
 }

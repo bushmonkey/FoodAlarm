@@ -15,7 +15,7 @@
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:text="Add item"
         android:id="@+id/textView"
         android:layout_alignParentTop="true"
@@ -28,6 +28,24 @@
         android:paddingBottom="10dp"
         android:paddingLeft="10dp"
         android:textSize="12dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:text="Expiring Soon"
+        android:id="@+id/TitleView"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="true"
+        android:background="#58595B"
+        android:layout_alignParentRight="false"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/textView"
+        android:paddingLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:textSize="12dp"
+        android:textColor="#ffffff"
+        android:gravity="center_horizontal|left" />
 
 <!--
         <ExpandableListView
@@ -42,8 +60,7 @@
           <ListView android:id="@+id/lvUsers"
               android:layout_height="match_parent"
               android:layout_width="match_parent"
-              android:layout_below="@+id/textView"
-              android:layout_marginTop="10dp"
+              android:layout_below="@+id/TitleView"
               />
 
 

@@ -31,8 +31,11 @@ public class ExpandableAnimation extends Animation {
         // decide to show or hide the view
         mIsVisibleAfter = (view.getVisibility() == View.VISIBLE);
 
-        mMarginStart = mViewLayoutParams.bottomMargin;
-        mMarginEnd = (mMarginStart == 0 ? (0- view.getHeight()) : 0);
+        // mMarginStart = mViewLayoutParams.bottomMargin;
+        // mMarginEnd = (mMarginStart == 0 ? (0- view.getHeight()) : 0);
+
+        mMarginStart = mViewLayoutParams.rightMargin;
+        mMarginEnd = (mMarginStart == 0 ? (0- view.getWidth()) : 0);
 
         view.setVisibility(View.VISIBLE);
     }
@@ -44,7 +47,10 @@ public class ExpandableAnimation extends Animation {
         if (interpolatedTime < 1.0f) {
 
             // Calculating the new bottom margin, and setting it
-            mViewLayoutParams.bottomMargin = mMarginStart
+            //mViewLayoutParams.bottomMargin = mMarginStart
+            //        + (int) ((mMarginEnd - mMarginStart) * interpolatedTime);
+
+            mViewLayoutParams.rightMargin = mMarginStart
                     + (int) ((mMarginEnd - mMarginStart) * interpolatedTime);
 
             // Invalidating the layout, making us seeing the changes we made
@@ -52,7 +58,8 @@ public class ExpandableAnimation extends Animation {
 
             // Making sure we didn't run the ending before (it happens!)
         } else if (!mWasEndedAlready) {
-            mViewLayoutParams.bottomMargin = mMarginEnd;
+            // mViewLayoutParams.bottomMargin = mMarginEnd;
+            mViewLayoutParams.rightMargin = mMarginEnd;
             mAnimatedView.requestLayout();
 
             if (mIsVisibleAfter) {
