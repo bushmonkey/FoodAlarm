@@ -81,7 +81,7 @@ public class FoodSummary extends Activity {
             ItemArray.RemoveItem(position);
         Toast.makeText(
                 getApplicationContext(),
-                position+" Item used", Toast.LENGTH_SHORT)
+                "Food used", Toast.LENGTH_SHORT)
                 .show();
             adapter.notifyDataSetChanged();
     }
@@ -92,7 +92,7 @@ public class FoodSummary extends Activity {
         ItemArray.RemoveItem(position);
         Toast.makeText(
                 getApplicationContext(),
-                "Item wasted", Toast.LENGTH_SHORT)
+                "Food wasted", Toast.LENGTH_SHORT)
                 .show();
         adapter.notifyDataSetChanged();
     }

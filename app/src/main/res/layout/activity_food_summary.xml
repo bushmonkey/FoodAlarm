@@ -14,8 +14,8 @@
     >
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
+        android:layout_width="fill_parent"
+        android:layout_height="30dp"
         android:text="Add item"
         android:id="@+id/textView"
         android:layout_alignParentTop="true"
@@ -24,14 +24,13 @@
         android:background="#ffffff"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
         android:paddingLeft="10dp"
-        android:textSize="12dp" />
+        android:textSize="12dp"
+        android:gravity="center_vertical" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="24dp"
+        android:layout_width="fill_parent"
+        android:layout_height="22dp"
         android:text="Expiring Soon"
         android:id="@+id/TitleView"
         android:layout_alignParentTop="false"
@@ -42,10 +41,10 @@
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/textView"
         android:paddingLeft="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:textSize="12dp"
         android:textColor="#ffffff"
-        android:gravity="center_horizontal|left" />
+        android:gravity="center_vertical|left" />
 
 <!--
         <ExpandableListView
@@ -61,7 +60,55 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:layout_below="@+id/TitleView"
-        />
+        android:layout_above="@+id/textView9"
+        android:layout_marginBottom="10dp" />
 
+    <TextView
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:text="Month"
+        android:id="@+id/textView10"
+        android:background="#bbb5cc"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textSize="12dp"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_alignWithParentIfMissing="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentRight="false"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:text="Week"
+        android:id="@+id/textView9"
+        android:background="#ccc8d2"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textSize="12dp"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_toStartOf="@id/textView10" />
+
+
+
+    <TextView
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:text="All"
+        android:id="@+id/textView11"
+        android:background="#a5abc6"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textSize="12dp"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="false"
+        android:layout_toEndOf="@id/textView10"
+        android:layout_alignParentEnd="false" />
 
       </RelativeLayout>

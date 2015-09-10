@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +38,18 @@ public class AddItem extends Activity {
 
         saveButton = (Button) findViewById(R.id.UpdateDetailsBtn);
         saveButton.setOnClickListener(onSave);
+
+        ImageView ivPencil= (ImageView) findViewById(R.id.PrdImg);
+        ivPencil.setImageResource(R.drawable.pencil);
+
+        ImageView ivQuantity= (ImageView) findViewById(R.id.QuantImg);
+        ivQuantity.setImageResource(R.drawable.qut);
+
+        ImageView ivCal= (ImageView) findViewById(R.id.CalendarImg);
+        ivCal.setImageResource(R.drawable.calendar);
+
+        ImageView ivPrice= (ImageView) findViewById(R.id.PriceImg);
+        ivPrice.setImageResource(R.drawable.price);
     }
 
     @Override
@@ -123,6 +136,10 @@ public class AddItem extends Activity {
         startActivityForResult(myIntent,0);
     }
 
+    public void NewItem (View v) {
+        Intent myIntent = new Intent(v.getContext(), AddItem.class);
+        startActivityForResult(myIntent, 0);
+    }
 
     private View.OnClickListener onSave=new View.OnClickListener()
     {

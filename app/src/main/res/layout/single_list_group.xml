@@ -76,6 +76,7 @@
             android:text="Wasted"
             android:background="#ff6761"
             android:gravity="center"
-            android:layout_toEndOf="@id/usedButton"/>
+            android:layout_toEndOf="@id/usedButton"
+            android:onClick="wastedClick"/>
     </RelativeLayout>
 </RelativeLayout>
