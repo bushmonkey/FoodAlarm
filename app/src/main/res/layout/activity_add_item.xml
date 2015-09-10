@@ -4,6 +4,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="@drawable/background"
     tools:context="tmedia_ltd.foodalarm.AddItem"
     android:orientation="vertical"
     android:screenOrientation="portrait">
@@ -235,7 +236,7 @@
     <Button
         android:layout_width="60dp"
         android:layout_height="35dp"
-        android:text="Exit"
+        android:text="HOME"
         android:id="@+id/exitToViewbtn"
         android:onClick="BackToSummary"
         android:layout_alignParentBottom="true"
@@ -246,7 +247,7 @@
     <Button
         android:layout_width="60dp"
         android:layout_height="35dp"
-        android:text="Save"
+        android:text="SAVE"
         android:id="@+id/UpdateDetailsBtn"
         android:layout_alignTop="@+id/NewBtn"
         android:background="#a5abc6"
