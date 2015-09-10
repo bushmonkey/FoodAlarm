@@ -15,7 +15,7 @@
 
     <TextView
         android:layout_width="fill_parent"
-        android:layout_height="30dp"
+        android:layout_height="@dimen/stack_height"
         android:text="Add item"
         android:id="@+id/textView"
         android:layout_alignParentTop="true"
@@ -25,7 +25,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:paddingLeft="10dp"
-        android:textSize="12dp"
+        android:textSize="@dimen/textSize_height"
         android:gravity="center_vertical" />
 
     <TextView
@@ -42,7 +42,7 @@
         android:layout_below="@+id/textView"
         android:paddingLeft="10dp"
         android:layout_marginTop="15dp"
-        android:textSize="12dp"
+        android:textSize="@dimen/textSize_height"
         android:textColor="#ffffff"
         android:gravity="center_vertical|left" />
 
@@ -71,7 +71,7 @@
         android:background="#bbb5cc"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:textSize="12dp"
+        android:textSize="@dimen/textSize_height"
         android:gravity="center"
         android:layout_alignParentBottom="true"
         android:layout_alignWithParentIfMissing="false"
@@ -87,7 +87,7 @@
         android:background="#ccc8d2"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:textSize="12dp"
+        android:textSize="@dimen/textSize_height"
         android:gravity="center"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="false"
@@ -104,7 +104,7 @@
         android:background="#a5abc6"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:textSize="12dp"
+        android:textSize="@dimen/textSize_height"
         android:gravity="center"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="false"

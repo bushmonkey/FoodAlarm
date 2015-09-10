@@ -2,10 +2,14 @@ package tmedia_ltd.foodalarm;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.support.v7.app.NotificationCompat;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
@@ -26,6 +30,8 @@ public class FoodSummary extends Activity {
     HashMap<String, List<String>> listDataChild;
     CustomItemAdapter adapter;
     private PendingIntent pendingIntent;
+    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +41,9 @@ public class FoodSummary extends Activity {
         /* Retrieve a PendingIntent that will perform a broadcast */
         Intent alarmIntent = new Intent(FoodSummary.this, FoodAlarmReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(FoodSummary.this, 0, alarmIntent, 0);
-        startNotificationAt10();
+        //startNotificationAt10();
+        scheduleNotification(getNotification("5 second delay"), 5000);
+
         TextView submit=(TextView)findViewById(R.id.textView);
         submit.setOnClickListener(onSubmit);
 
@@ -127,10 +135,49 @@ public class FoodSummary extends Activity {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, 21);
-        calendar.set(Calendar.MINUTE, 00);
+        calendar.set(Calendar.MINUTE, 20);
 
         /* Repeating on every 20 minutes interval */
         manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                1000 * 60 * 20, pendingIntent);
+                AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
+
+    private void Notify(String notificationTitle, String notificationMessage){
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        @SuppressWarnings("deprecation")
+
+        Notification notification = new Notification(R.drawable.icon,"New Message", System.currentTimeMillis());
+        Intent notificationIntent = new Intent(this,FoodSummary.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+
+        notification.setLatestEventInfo(FoodSummary.this, notificationTitle, notificationMessage, pendingIntent);
+        notificationManager.notify(9999, notification);
+    }
+
+    public void scheduleNotification(Notification notification, int delay) {
+
+        Intent notificationIntent = new Intent(this, DeviceBootReceiver.class);
+        notificationIntent.putExtra(DeviceBootReceiver.NOTIFICATION_ID, 1);
+        notificationIntent.putExtra(DeviceBootReceiver.NOTIFICATION, notification);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        /* Set the alarm to start at 10:30 AM */
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 22);
+        calendar.set(Calendar.MINUTE, 35);
+
+        long futureInMillis = SystemClock.elapsedRealtime() + delay;
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+       alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+        //alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
+
+    private Notification getNotification(String content) {
+        Notification.Builder builder = new Notification.Builder(this);
+        builder.setContentTitle("Food expiring today");
+        builder.setContentText(content);
+        builder.setSmallIcon(R.drawable.calendar);
+        return builder.build();
     }
 }

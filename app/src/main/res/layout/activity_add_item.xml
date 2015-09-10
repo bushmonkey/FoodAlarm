@@ -14,7 +14,7 @@
         android:screenOrientation="portrait"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/margin_top"
         android:id="@+id/PrdLyt"
         android:background="#ffffff">
 
@@ -31,7 +31,7 @@
     <EditText
         android:layout_width="fill_parent"
         android:textColor="#aeaeae"
-        android:layout_height="30dp"
+        android:layout_height="@dimen/stack_height"
         android:id="@+id/ProductNameText"
         android:inputType="textAutoCorrect"
         android:autoText="false"
@@ -40,7 +40,7 @@
         android:singleLine="false"
         android:background="#ffffff"
         android:paddingLeft="10dp"
-        android:textSize="12sp"
+        android:textSize="@dimen/textSize_height"
         android:layout_toEndOf="@id/PrdImg"
         android:layout_centerVertical="true" />
 
@@ -57,7 +57,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/PrdLyt"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/margin_top"
         android:id="@+id/ExpiryLyt"
         android:background="#ffffff">
 
@@ -74,7 +74,7 @@
     <TextView
         android:text="Expiry date - "
         android:layout_width="100dp"
-        android:layout_height="30dp"
+        android:layout_height="@dimen/stack_height"
         android:id="@+id/ExpiryTitle"
         android:hint="Expiry date"
         android:layout_alignParentEnd="false"
@@ -82,7 +82,7 @@
         android:gravity="center_vertical|left"
         android:textColor="#aeaeae"
         android:background="#ffffff"
-        android:textSize="12sp"
+        android:textSize="@dimen/textSize_height"
         android:textIsSelectable="false"
         android:layout_toEndOf="@id/CalendarImg"
         android:layout_centerVertical="true"
@@ -90,7 +90,7 @@
 
     <EditText
         android:layout_width="fill_parent"
-        android:layout_height="30dp"
+        android:layout_height="@dimen/stack_height"
         android:inputType="date"
         android:ems="10"
         android:id="@+id/ExpiryDatePicker"
@@ -98,7 +98,7 @@
         android:layout_toRightOf="@+id/ExpiryTitle"
         android:layout_toEndOf="@+id/ExpiryTitle"
         android:background="#ffffff"
-        android:textSize="12sp"
+        android:textSize="@dimen/textSize_height"
         android:gravity="center_vertical"
         android:paddingLeft="5dp"
         android:textColor="#aeaeae"
@@ -112,7 +112,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ExpiryLyt"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/margin_top"
         android:id="@+id/QuantityLyt"
         android:background="#ffffff">
 
@@ -126,7 +126,7 @@
             android:layout_marginTop="10dp" />
     <TextView
         android:layout_width="fill_parent"
-        android:layout_height="30dp"
+        android:layout_height="@dimen/stack_height"
         android:text="Quantity"
         android:id="@+id/QuantityTitle"
         android:layout_toEndOf="@id/QuantImg"
@@ -134,7 +134,7 @@
         android:layout_marginTop="5dp"
         android:background="#ffffff"
         android:paddingLeft="10dp"
-        android:textSize="12sp"
+        android:textSize="@dimen/textSize_height"
         android:gravity="center_vertical" />
 
     <Button
@@ -184,7 +184,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/QuantityLyt"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/margin_top"
         android:id="@+id/PriceLyt"
         android:background="#ffffff">
         <ImageView
@@ -199,6 +199,7 @@
         android:layout_height="wrap_content"
         android:text="Price"
         android:paddingLeft="10dp"
+        android:textSize="@dimen/textSize_height"
         android:id="@+id/PriceText"
         android:textColor="#aeaeae"
         android:layout_toEndOf="@id/PriceImg"
@@ -208,7 +209,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#aeaeae"
-            android:inputType="textAutoCorrect"
+            android:textSize="@dimen/textSize_height"
+            android:inputType="text|numberSigned"
             android:id="@+id/ProductPriceText"
             android:paddingLeft="20dp"
             android:hint="£50"
@@ -219,7 +221,7 @@
             android:layout_marginRight="5dp"
 
             android:layout_centerVertical="true"
-            android:textSize="12sp" />
+            />
 
 
     </RelativeLayout>

@@ -4,4 +4,8 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="item_button_width">24dp</dimen>
     <dimen name="item_button_height">25dp</dimen>
+    <dimen name="stack_height">35dp</dimen>
+    <dimen name="margin_top">15dp</dimen>
+    <dimen name="textSize_height">16sp</dimen>
+
 </resources>

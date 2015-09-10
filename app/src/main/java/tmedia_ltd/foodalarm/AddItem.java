@@ -24,6 +24,7 @@ public class AddItem extends Activity {
     Date ExpiryDateValue = new Date();
     EditText ProductNameEt;
     EditText mDateEntryField;
+    EditText mPriceEntryField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,9 @@ public class AddItem extends Activity {
         ProductNameEt = (EditText) findViewById(R.id.ProductNameText);
         mDateEntryField = (EditText) findViewById(R.id.ExpiryDatePicker);
         mDateEntryField.addTextChangedListener(mDateEntryWatcher);
+
+        mPriceEntryField = (EditText) findViewById(R.id.ProductPriceText);
+        mPriceEntryField.addTextChangedListener(mPriceEntryWatcher);
 
         saveButton = (Button) findViewById(R.id.UpdateDetailsBtn);
         saveButton.setOnClickListener(onSave);
@@ -104,6 +108,38 @@ public class AddItem extends Activity {
                 mDateEntryField.setError("Enter a valid date: dd/MM/YYYY");
             } else {
                 mDateEntryField.setError(null);
+            }
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {}
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+    };
+
+    private TextWatcher mPriceEntryWatcher = new TextWatcher() {
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            String working = s.toString();
+            boolean isValid = true;
+            if (working.length()==0 && before ==0) {
+                    working+="£";
+                    mPriceEntryField.setText(working);
+                    mPriceEntryField.setSelection(working.length());
+
+
+            } else if (working.length()!=0) {
+                isValid = true;
+            }
+
+            if (!isValid) {
+                mPriceEntryField.setError("Enter a valid price");
+            } else {
+                mPriceEntryField.setError(null);
             }
 
         }
