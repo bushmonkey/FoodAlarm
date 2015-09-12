@@ -234,7 +234,8 @@
         android:background="#7ed267"
         android:layout_marginBottom="10dp"
         android:textColor="#ffffff"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:onClick="ScanBarcode"/>
     <Button
         android:layout_width="60dp"
         android:layout_height="35dp"

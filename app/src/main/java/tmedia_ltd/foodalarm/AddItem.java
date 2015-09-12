@@ -8,28 +8,36 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+
 import java.util.Date;
 
-public class AddItem extends Activity {
+public class AddItem extends Activity implements OnClickListener {
     TextView mainTextView;
     Button saveButton;
     Button newItemButton;
+    Button scanBtn;
     String productNameTxt = new String();
     Date ExpiryDateValue = new Date();
     EditText ProductNameEt;
     EditText mDateEntryField;
     EditText mPriceEntryField;
+    IntentIntegrator scanIntegrator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
+
+        scanIntegrator = new IntentIntegrator(this);
+
         // mainTextView = (TextView) findViewById(R.id.InfoText)
         newItemButton = (Button) findViewById(R.id.NewBtn);
         //newItemButton.setOnClickListener(this);
@@ -41,7 +49,10 @@ public class AddItem extends Activity {
         mPriceEntryField.addTextChangedListener(mPriceEntryWatcher);
 
         saveButton = (Button) findViewById(R.id.UpdateDetailsBtn);
-        saveButton.setOnClickListener(onSave);
+        saveButton.setOnClickListener(this);
+
+        scanBtn = (Button)findViewById(R.id.button);
+        scanBtn.setOnClickListener(this);
 
         ImageView ivPencil= (ImageView) findViewById(R.id.PrdImg);
         ivPencil.setImageResource(R.drawable.pencil);
@@ -177,10 +188,9 @@ public class AddItem extends Activity {
         startActivityForResult(myIntent, 0);
     }
 
-    private View.OnClickListener onSave=new View.OnClickListener()
-    {
-        @Override
-        public void onClick(View view) {
+    @Override
+    public void onClick(View v) {
+        if(v.getId()==R.id.UpdateDetailsBtn){
             //Date ExpiryDatePickerText = ExpiryDatePickerEt.();
             String ProductText = ProductNameEt.getText().toString();
             ItemArray.AddItem(ProductText);
@@ -188,6 +198,13 @@ public class AddItem extends Activity {
                     getApplicationContext(),
                     "Item saved", Toast.LENGTH_SHORT)
                     .show();
+
         }
-    };
+
+        if(v.getId()==R.id.button){
+        //scan
+        scanIntegrator.initiateScan();
+
+        }
+    }
 }
