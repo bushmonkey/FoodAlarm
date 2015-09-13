@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.util.Date;
 
@@ -24,11 +25,16 @@ public class AddItem extends Activity implements OnClickListener {
     Button saveButton;
     Button newItemButton;
     Button scanBtn;
+    Button minQtBtn;
+    Button MaxQtBtn;
     String productNameTxt = new String();
     Date ExpiryDateValue = new Date();
     EditText ProductNameEt;
     EditText mDateEntryField;
     EditText mPriceEntryField;
+    EditText mQuantityField;
+    Integer QuantityValue;
+    String QuantityValueText = new String();
     IntentIntegrator scanIntegrator;
 
     @Override
@@ -40,16 +46,21 @@ public class AddItem extends Activity implements OnClickListener {
 
         // mainTextView = (TextView) findViewById(R.id.InfoText)
         newItemButton = (Button) findViewById(R.id.NewBtn);
+        minQtBtn = (Button) findViewById(R.id.button3);
+        MaxQtBtn = (Button) findViewById(R.id.button2);
         //newItemButton.setOnClickListener(this);
         ProductNameEt = (EditText) findViewById(R.id.ProductNameText);
         mDateEntryField = (EditText) findViewById(R.id.ExpiryDatePicker);
         mDateEntryField.addTextChangedListener(mDateEntryWatcher);
-
+        mQuantityField = (EditText) findViewById(R.id.editText);
+        QuantityValue = Integer.parseInt(mQuantityField.getText().toString());
         mPriceEntryField = (EditText) findViewById(R.id.ProductPriceText);
         mPriceEntryField.addTextChangedListener(mPriceEntryWatcher);
 
         saveButton = (Button) findViewById(R.id.UpdateDetailsBtn);
         saveButton.setOnClickListener(this);
+        minQtBtn.setOnClickListener(this);
+        MaxQtBtn.setOnClickListener(this);
 
         scanBtn = (Button)findViewById(R.id.button);
         scanBtn.setOnClickListener(this);
@@ -188,6 +199,23 @@ public class AddItem extends Activity implements OnClickListener {
         startActivityForResult(myIntent, 0);
     }
 
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+//retrieve scan result
+    IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+
+        if (scanningResult != null) {
+            String scanContent = scanningResult.getContents();
+            String scanFormat = scanningResult.getFormatName();
+            ProductNameEt.setText("scan: " + scanContent);
+        }
+        else{
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    "Scan not recognised", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+
+    }
+
     @Override
     public void onClick(View v) {
         if(v.getId()==R.id.UpdateDetailsBtn){
@@ -205,6 +233,18 @@ public class AddItem extends Activity implements OnClickListener {
         //scan
         scanIntegrator.initiateScan();
 
+        }
+
+        if(v.getId()==R.id.button2)
+        {
+            QuantityValue++;
+            mQuantityField.setText(Integer.toString(QuantityValue));
+        }
+
+        if(v.getId()==R.id.button3 && QuantityValue >0)
+        {
+            QuantityValue--;
+            mQuantityField.setText(Integer.toString(QuantityValue));
         }
     }
 }

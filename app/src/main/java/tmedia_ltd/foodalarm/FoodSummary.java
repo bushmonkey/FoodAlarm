@@ -2,13 +2,9 @@ package tmedia_ltd.foodalarm;
 
 import android.app.Activity;
 import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v7.app.NotificationCompat;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,6 +18,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+
 public class FoodSummary extends Activity {
 //public class FoodSummary extends Activity {
     ExpandableListAdapter listAdapter;
@@ -30,6 +27,7 @@ public class FoodSummary extends Activity {
     HashMap<String, List<String>> listDataChild;
     CustomItemAdapter adapter;
     private PendingIntent pendingIntent;
+
     NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
 
 
@@ -38,11 +36,22 @@ public class FoodSummary extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_summary);
 
-        /* Retrieve a PendingIntent that will perform a broadcast */
-        Intent alarmIntent = new Intent(FoodSummary.this, FoodAlarmReceiver.class);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 18);
+        calendar.set(Calendar.MINUTE, 30);
+        calendar.set(Calendar.SECOND, 0);
+        Intent intent1 = new Intent(this, FoodAlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0,intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager am = (AlarmManager) this.getSystemService(this.ALARM_SERVICE);
+        am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+
+        /* OLD NOTIFICATION SERVICE -- TO DELETE
+        Retrieve a PendingIntent that will perform a broadcast
+       Intent alarmIntent = new Intent(FoodSummary.this, FoodAlarmReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(FoodSummary.this, 0, alarmIntent, 0);
-        //startNotificationAt10();
-        scheduleNotification(getNotification("5 second delay"), 5000);
+        startNotificationAt10();
+        scheduleNotification(getNotification("5 second delay"), 5000);*/
 
         TextView submit=(TextView)findViewById(R.id.textView);
         submit.setOnClickListener(onSubmit);
@@ -127,20 +136,25 @@ public class FoodSummary extends Activity {
         }
     };
 
-    public void startNotificationAt10() {
-        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        int interval = 1000 * 60 * 20;
 
-        /* Set the alarm to start at 10:30 AM */
+
+    /*   PREVIOUS NOTIFICATION SERVICE -- REDUNDANT -- TO DELETE WHEN NEW SERVICE WORKING
+ public void startNotificationAt10() {
+     AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+     int interval = 1000 * 60 * 20;
+
+
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, 21);
         calendar.set(Calendar.MINUTE, 20);
 
-        /* Repeating on every 20 minutes interval */
+
         manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, pendingIntent);
     }
+
+
 
     private void Notify(String notificationTitle, String notificationMessage){
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -161,7 +175,7 @@ public class FoodSummary extends Activity {
         notificationIntent.putExtra(DeviceBootReceiver.NOTIFICATION, notification);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        /* Set the alarm to start at 10:30 AM */
+
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, 22);
@@ -180,4 +194,6 @@ public class FoodSummary extends Activity {
         builder.setSmallIcon(R.drawable.calendar);
         return builder.build();
     }
+    */
+
 }
