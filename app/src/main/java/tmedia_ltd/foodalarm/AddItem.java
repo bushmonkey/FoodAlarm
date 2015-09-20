@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,6 +37,7 @@ public class AddItem extends Activity implements OnClickListener {
     Integer QuantityValue;
     String QuantityValueText = new String();
     IntentIntegrator scanIntegrator;
+    DBHelper mydb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,7 @@ public class AddItem extends Activity implements OnClickListener {
         setContentView(R.layout.activity_add_item);
 
         scanIntegrator = new IntentIntegrator(this);
+        mydb = new DBHelper(this);
 
         // mainTextView = (TextView) findViewById(R.id.InfoText)
         newItemButton = (Button) findViewById(R.id.NewBtn);
@@ -221,7 +224,10 @@ public class AddItem extends Activity implements OnClickListener {
         if(v.getId()==R.id.UpdateDetailsBtn){
             //Date ExpiryDatePickerText = ExpiryDatePickerEt.();
             String ProductText = ProductNameEt.getText().toString();
-            ItemArray.AddItem(ProductText);
+            //ItemArray.AddItem(ProductText);
+            boolean itemInserted = mydb.insertContact(ProductText,"test","test","test");
+            Log.d("Item inserted?", Boolean.toString(itemInserted));
+
             Toast.makeText(
                     getApplicationContext(),
                     "Item saved", Toast.LENGTH_SHORT)

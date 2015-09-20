@@ -6,9 +6,11 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by will on 9/20/2015.
@@ -48,17 +50,26 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", name);
-        contentValues.put("phone", expiry);
-        contentValues.put("email", quantity);
-        contentValues.put("street", price);
+        contentValues.put("expiry", expiry);
+        contentValues.put("quantity", quantity);
+        contentValues.put("price", price);
         db.insert("ItemDetails", null, contentValues);
         return true;
     }
 
-    public Cursor getData(int id) {
+    public FoodItem getData(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("select * from ItemDetails where id=" + id + "", null);
-        return res;
+        if (res != null)
+            res.moveToFirst();
+        FoodItem foodItem = new FoodItem();
+        foodItem.setId(Integer.parseInt(res.getString(0)));
+        foodItem.setName(res.getString(res.getColumnIndex(CONTACTS_COLUMN_NAME)));
+        foodItem.setExpiry(res.getString(res.getColumnIndex(CONTACTS_COLUMN_EXPIRY)));
+        foodItem.setPrice(res.getString(res.getColumnIndex(CONTACTS_COLUMN_PRICE)));
+        foodItem.setQuantity(res.getString(res.getColumnIndex(CONTACTS_COLUMN_QUANTITY)));
+
+        return foodItem;
     }
 
     public int numberOfRows() {
@@ -71,9 +82,9 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", name);
-        contentValues.put("phone", expiry);
-        contentValues.put("email", quantity);
-        contentValues.put("street", price);
+        contentValues.put("expiry", expiry);
+        contentValues.put("quantity", quantity);
+        contentValues.put("price", price);
         db.update("ItemDetails", contentValues, "id = ? ", new String[]{Integer.toString(id)});
         return true;
     }
@@ -85,18 +96,32 @@ public class DBHelper extends SQLiteOpenHelper {
                 new String[]{Integer.toString(id)});
     }
 
-    public ArrayList<ItemArray> getAllContacts() {
-        ArrayList<ItemArray> array_list = new ArrayList<ItemArray>();
+    public List<FoodItem> getAllContacts() {
+        List<FoodItem> foodItems = new LinkedList<FoodItem>();
 
         //hp = new HashMap();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from ItemDetails", new String[] { CONTACTS_COLUMN_NAME });
+        Cursor res = db.rawQuery("select * from ItemDetails", null);
         res.moveToFirst();
 
-        while (res.isAfterLast() == false) {
-            ItemArray.AddItem(res.getString(res.getColumnIndex(CONTACTS_COLUMN_NAME)));
-            res.moveToNext();
+        // 3. go over each row, build book and add it to list
+        FoodItem foodItem = null;
+        if (res.moveToFirst()) {
+            do {
+                foodItem=new FoodItem();
+                foodItem.setId(Integer.parseInt(res.getString(0)));
+                foodItem.setName(res.getString(res.getColumnIndex(CONTACTS_COLUMN_NAME)));
+                foodItem.setExpiry(res.getString(res.getColumnIndex(CONTACTS_COLUMN_EXPIRY)));
+                foodItem.setPrice(res.getString(res.getColumnIndex(CONTACTS_COLUMN_PRICE)));
+                foodItem.setQuantity(res.getString(res.getColumnIndex(CONTACTS_COLUMN_QUANTITY)));
+
+                // Add book to books
+                foodItems.add(foodItem);
+            } while (res.moveToNext());
         }
-        return array_list;
+
+        Log.d("getAllBooks()", foodItems.toString());
+
+        return foodItems;
     }
 }

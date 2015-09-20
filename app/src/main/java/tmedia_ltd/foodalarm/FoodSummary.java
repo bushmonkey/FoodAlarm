@@ -13,7 +13,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -54,8 +53,11 @@ public class FoodSummary extends Activity {
         scheduleNotification(getNotification("5 second delay"), 5000);*/
 
         mydb = new DBHelper(this);
+        mydb.getWritableDatabase();
 
-        ArrayList<ItemArray> arrayOfUsers = mydb.getAllContacts();
+        //boolean itemInserted = mydb.insertContact("test","test","test","test");
+        //Log.d("Item inserted?",Boolean.toString(itemInserted));
+        List<FoodItem> arrayOfUsers = mydb.getAllContacts();
 
         // use the SimpleCursorAdapter to show the
         // elements in a ListView
@@ -101,9 +103,9 @@ public class FoodSummary extends Activity {
     private void populateItemList() {
         // Construct the data source
         String ItemName = new String();
-        ArrayList<FoodTable_SQLlite> arrayOfUsers = new ArrayList<FoodTable_SQLlite>();
+        List<FoodItem> arrayOfUsers;
         //arrayOfUsers=ItemArray.AddItem(ItemName);
-        arrayOfUsers=datasource.getAllComments();
+        arrayOfUsers=mydb.getAllContacts();
         // Create the adapter to convert the array to views
         CustomItemAdapter adapter = new CustomItemAdapter(this, arrayOfUsers);
         // Attach the adapter to a ListView

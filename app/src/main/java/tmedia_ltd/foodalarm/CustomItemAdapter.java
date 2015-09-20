@@ -9,24 +9,23 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by will on 9/4/2015.
  */
 
-//public class CustomItemAdapter extends ArrayAdapter<ItemArray> {
-public class CustomItemAdapter extends ArrayAdapter<ItemArray> {
 
-//public class CustomItemAdapter extends ArrayAdapter<FoodTable_SQLlite> {
-    public CustomItemAdapter(final Context context, final ArrayList<ItemArray> users) {
+public class CustomItemAdapter extends ArrayAdapter<FoodItem> {
+
+    public CustomItemAdapter(final Context context, final List<FoodItem> users) {
         super(context, 0, users);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
-        ItemArray user = getItem(position);
+        FoodItem user = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.single_list_group, parent, false);
@@ -56,7 +55,8 @@ public class CustomItemAdapter extends ArrayAdapter<ItemArray> {
         // Lookup view for data population
         TextView tvName = (TextView) convertView.findViewById(R.id.lblListItem);
         // Populate the data into the template view using the data object
-        //tvName.setText(user.name);
+
+        tvName.setText(user.getName());
         // Return the completed view to render on screen
         return convertView;
     }
