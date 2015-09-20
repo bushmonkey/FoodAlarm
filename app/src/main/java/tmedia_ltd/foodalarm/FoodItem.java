@@ -1,5 +1,9 @@
 package tmedia_ltd.foodalarm;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by will on 9/20/2015.
  */
@@ -7,7 +11,7 @@ public class FoodItem {
 
     private int id;
     private String name;
-    private String expiry;
+    private Long expiry;
 
 
 
@@ -24,7 +28,7 @@ public class FoodItem {
         this.name = name;
     }
 
-    public void setExpiry(String expiry) {
+    public void setExpiry(Long expiry) {
         this.expiry = expiry;
     }
 
@@ -36,11 +40,18 @@ public class FoodItem {
         return name;
     }
 
+    public String getExpiry() {
+        Date d = new Date(expiry);
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        String formattedExpiryDate = df.format(d);
+        return formattedExpiryDate;
+    }
+
     public void setPrice(String price) {
         this.price = price;
     }
 
-    public FoodItem(String name, String expiry, String quantity, String price) {
+    public FoodItem(String name, Long expiry, String quantity, String price) {
         super();
         this.name = name;
 
@@ -53,7 +64,7 @@ public class FoodItem {
 
     @Override
     public String toString() {
-        return "FoodItem [id=" + id + ", name=" + name + ", expiry=" + expiry + ", quantity=" + quantity + ", price=" + price
+        return "FoodItem [id=" + id + ", name=" + name + ", expiry=" + expiry.toString() + ", quantity=" + quantity + ", price=" + price
                 + "]";
     }
 }

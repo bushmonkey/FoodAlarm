@@ -1,7 +1,6 @@
 package tmedia_ltd.foodalarm;
 
 import android.app.Activity;
-import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,10 +39,10 @@ public class FoodSummary extends Activity {
         calendar.set(Calendar.HOUR_OF_DAY, 18);
         calendar.set(Calendar.MINUTE, 30);
         calendar.set(Calendar.SECOND, 0);
-        Intent intent1 = new Intent(this, FoodAlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0,intent1, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager am = (AlarmManager) this.getSystemService(this.ALARM_SERVICE);
-        am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        //Intent intent1 = new Intent(this, FoodAlarmReceiver.class);
+       // PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0,intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+      //  AlarmManager am = (AlarmManager) this.getSystemService(this.ALARM_SERVICE);
+       // am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
 
         /* OLD NOTIFICATION SERVICE -- TO DELETE
         Retrieve a PendingIntent that will perform a broadcast

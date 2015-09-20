@@ -27,7 +27,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private HashMap hp;
 
     public DBHelper(Context context) {
-        super(context, DATABASE_NAME, null, 1);
+        super(context, DATABASE_NAME, null, 2);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class DBHelper extends SQLiteOpenHelper {
         // TODO Auto-generated method stub
         db.execSQL(
                 "create table ItemDetails " +
-                        "(id integer primary key, name text,expiry text,quantity text, price text)"
+                        "(id integer primary key, name text,expiry int,quantity text, price text)"
         );
     }
 
@@ -46,7 +46,7 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insertContact(String name, String expiry, String quantity, String price) {
+    public boolean insertContact(String name, long expiry, String quantity, String price) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", name);
@@ -54,6 +54,7 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put("quantity", quantity);
         contentValues.put("price", price);
         db.insert("ItemDetails", null, contentValues);
+        Log.d("values inserted:", contentValues.toString());
         return true;
     }
 
@@ -65,7 +66,7 @@ public class DBHelper extends SQLiteOpenHelper {
         FoodItem foodItem = new FoodItem();
         foodItem.setId(Integer.parseInt(res.getString(0)));
         foodItem.setName(res.getString(res.getColumnIndex(CONTACTS_COLUMN_NAME)));
-        foodItem.setExpiry(res.getString(res.getColumnIndex(CONTACTS_COLUMN_EXPIRY)));
+        foodItem.setExpiry(res.getLong(res.getColumnIndex(CONTACTS_COLUMN_EXPIRY)));
         foodItem.setPrice(res.getString(res.getColumnIndex(CONTACTS_COLUMN_PRICE)));
         foodItem.setQuantity(res.getString(res.getColumnIndex(CONTACTS_COLUMN_QUANTITY)));
 
@@ -78,7 +79,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return numRows;
     }
 
-    public boolean updateContact(Integer id, String name, String expiry, String quantity, String price) {
+    public boolean updateContact(Integer id, String name, Long expiry, String quantity, String price) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", name);
@@ -111,7 +112,36 @@ public class DBHelper extends SQLiteOpenHelper {
                 foodItem=new FoodItem();
                 foodItem.setId(Integer.parseInt(res.getString(0)));
                 foodItem.setName(res.getString(res.getColumnIndex(CONTACTS_COLUMN_NAME)));
-                foodItem.setExpiry(res.getString(res.getColumnIndex(CONTACTS_COLUMN_EXPIRY)));
+                foodItem.setExpiry(res.getLong(res.getColumnIndex(CONTACTS_COLUMN_EXPIRY)));
+                foodItem.setPrice(res.getString(res.getColumnIndex(CONTACTS_COLUMN_PRICE)));
+                foodItem.setQuantity(res.getString(res.getColumnIndex(CONTACTS_COLUMN_QUANTITY)));
+
+                // Add book to books
+                foodItems.add(foodItem);
+            } while (res.moveToNext());
+        }
+
+        Log.d("getAllBooks()", foodItems.toString());
+
+        return foodItems;
+    }
+
+    public List<FoodItem> getExpiringSoon() {
+        List<FoodItem> foodItems = new LinkedList<FoodItem>();
+
+        //hp = new HashMap();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select * from ItemDetails", null);
+        res.moveToFirst();
+
+        // 3. go over each row, build book and add it to list
+        FoodItem foodItem = null;
+        if (res.moveToFirst()) {
+            do {
+                foodItem=new FoodItem();
+                foodItem.setId(Integer.parseInt(res.getString(0)));
+                foodItem.setName(res.getString(res.getColumnIndex(CONTACTS_COLUMN_NAME)));
+                foodItem.setExpiry(res.getLong(res.getColumnIndex(CONTACTS_COLUMN_EXPIRY)));
                 foodItem.setPrice(res.getString(res.getColumnIndex(CONTACTS_COLUMN_PRICE)));
                 foodItem.setQuantity(res.getString(res.getColumnIndex(CONTACTS_COLUMN_QUANTITY)));
 

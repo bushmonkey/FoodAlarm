@@ -6,8 +6,6 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
 public class FoodAlarmReceiver extends BroadcastReceiver {
@@ -35,12 +33,12 @@ public class FoodAlarmReceiver extends BroadcastReceiver {
                     notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
-            Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+           // Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
             NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(
                     context).setSmallIcon(R.drawable.icon)
                     .setContentTitle("Food Alarm")
-                    .setContentText("You have food expiring soon").setSound(alarmSound)
+                    .setContentText("You have food expiring soon")
                     .setAutoCancel(true).setWhen(when)
                     .setContentIntent(pendingIntent)
                     .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000});

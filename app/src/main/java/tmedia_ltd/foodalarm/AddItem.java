@@ -19,6 +19,8 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class AddItem extends Activity implements OnClickListener {
@@ -38,6 +40,7 @@ public class AddItem extends Activity implements OnClickListener {
     String QuantityValueText = new String();
     IntentIntegrator scanIntegrator;
     DBHelper mydb;
+    Boolean ValidExpiryDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,7 @@ public class AddItem extends Activity implements OnClickListener {
 
         scanIntegrator = new IntentIntegrator(this);
         mydb = new DBHelper(this);
+        ValidExpiryDate = false;
 
         // mainTextView = (TextView) findViewById(R.id.InfoText)
         newItemButton = (Button) findViewById(R.id.NewBtn);
@@ -121,6 +125,7 @@ public class AddItem extends Activity implements OnClickListener {
                 //}
                // else {
                     isValid = true;
+                    ValidExpiryDate = true;
                     //working+="/";
                     mDateEntryField.setText(working);
                     mDateEntryField.setSelection(working.length());
@@ -222,16 +227,22 @@ public class AddItem extends Activity implements OnClickListener {
     @Override
     public void onClick(View v) {
         if(v.getId()==R.id.UpdateDetailsBtn){
-            //Date ExpiryDatePickerText = ExpiryDatePickerEt.();
-            String ProductText = ProductNameEt.getText().toString();
-            //ItemArray.AddItem(ProductText);
-            boolean itemInserted = mydb.insertContact(ProductText,"test","test","test");
-            Log.d("Item inserted?", Boolean.toString(itemInserted));
+            if (!ValidExpiryDate) {
+                mDateEntryField.setError("Enter a valid date: dd/MM/YYYY");
+            } else {
+                //Date ExpiryDatePickerText = ExpiryDatePickerEt.();
+                Long ExpiryDateinMillis = ConvertExpiryDate(mDateEntryField.getText().toString());
+                String ProductText = ProductNameEt.getText().toString();
+                //ItemArray.AddItem(ProductText);
+                //boolean itemInserted = mydb.insertContact(ProductText,System.currentTimeMillis(),"quantity","price");
+                boolean itemInserted = mydb.insertContact(ProductText, ExpiryDateinMillis, "quantity", "price");
+                Log.d("Item inserted?", Boolean.toString(itemInserted));
 
-            Toast.makeText(
-                    getApplicationContext(),
-                    "Item saved", Toast.LENGTH_SHORT)
-                    .show();
+                Toast.makeText(
+                        getApplicationContext(),
+                        "Item saved", Toast.LENGTH_SHORT)
+                        .show();
+            }
 
         }
 
@@ -252,5 +263,23 @@ public class AddItem extends Activity implements OnClickListener {
             QuantityValue--;
             mQuantityField.setText(Integer.toString(QuantityValue));
         }
+    }
+
+    private Long ConvertExpiryDate(String ExpiryDate)
+    {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        formatter.setLenient(false);
+
+        ExpiryDate = ExpiryDate + " 00:00";
+        Date oldDate = null;
+        try {
+            oldDate = formatter.parse(ExpiryDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        long oldMillis = oldDate.getTime();
+
+        return oldMillis;
     }
 }

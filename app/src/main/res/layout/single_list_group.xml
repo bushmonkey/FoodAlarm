@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="25dp"
+    android:layout_height="50dp"
     android:orientation="vertical"
     android:screenOrientation="portrait"
     android:background="#ffffff"
@@ -25,11 +25,19 @@
     <TextView
         android:id="@+id/lblListItem"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="25dp"
         android:textSize="@dimen/textSize_height"
         android:layout_toEndOf="@id/ItemCheckBox"
         android:layout_toStartOf="@id/toolbar"
         android:gravity="center|left" />
+    <TextView
+        android:id="@+id/lblListDate"
+        android:layout_width="fill_parent"
+        android:layout_height="25dp"
+        android:textSize="@dimen/textSize_smallheight"
+        android:layout_toEndOf="@id/ItemCheckBox"
+        android:gravity="center|left"
+        android:layout_below="@+id/lblListItem" />
 <!--
     <LinearLayout android:id="@+id/toolbar"
         android:layout_marginBottom="-22dip"
