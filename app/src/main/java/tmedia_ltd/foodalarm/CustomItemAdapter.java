@@ -18,6 +18,7 @@ import java.util.ArrayList;
 //public class CustomItemAdapter extends ArrayAdapter<ItemArray> {
 public class CustomItemAdapter extends ArrayAdapter<ItemArray> {
 
+//public class CustomItemAdapter extends ArrayAdapter<FoodTable_SQLlite> {
     public CustomItemAdapter(final Context context, final ArrayList<ItemArray> users) {
         super(context, 0, users);
     }
@@ -55,7 +56,7 @@ public class CustomItemAdapter extends ArrayAdapter<ItemArray> {
         // Lookup view for data population
         TextView tvName = (TextView) convertView.findViewById(R.id.lblListItem);
         // Populate the data into the template view using the data object
-        tvName.setText(user.name);
+        //tvName.setText(user.name);
         // Return the completed view to render on screen
         return convertView;
     }

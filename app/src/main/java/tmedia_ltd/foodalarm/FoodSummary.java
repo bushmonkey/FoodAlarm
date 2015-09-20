@@ -27,6 +27,7 @@ public class FoodSummary extends Activity {
     HashMap<String, List<String>> listDataChild;
     CustomItemAdapter adapter;
     private PendingIntent pendingIntent;
+    DBHelper mydb;
 
     NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
 
@@ -35,7 +36,6 @@ public class FoodSummary extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_summary);
-
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 18);
@@ -53,13 +53,24 @@ public class FoodSummary extends Activity {
         startNotificationAt10();
         scheduleNotification(getNotification("5 second delay"), 5000);*/
 
+        mydb = new DBHelper(this);
+
+        ArrayList<ItemArray> arrayOfUsers = mydb.getAllContacts();
+
+        // use the SimpleCursorAdapter to show the
+        // elements in a ListView
+        adapter = new CustomItemAdapter(this, arrayOfUsers);
+
+
+
+
         TextView submit=(TextView)findViewById(R.id.textView);
         submit.setOnClickListener(onSubmit);
 
         ListView listView = (ListView) findViewById(R.id.lvUsers);
          populateItemList();
 
-        ArrayList<ItemArray> arrayOfUsers = ItemArray.getUsers();
+        //ArrayList<ItemArray> arrayOfUsers = ItemArray.getUsers();
         // Create the adapter to convert the array to views
 
          adapter = new CustomItemAdapter(this, arrayOfUsers);
@@ -90,9 +101,9 @@ public class FoodSummary extends Activity {
     private void populateItemList() {
         // Construct the data source
         String ItemName = new String();
-        ArrayList<ItemArray> arrayOfUsers = new ArrayList<ItemArray>();
+        ArrayList<FoodTable_SQLlite> arrayOfUsers = new ArrayList<FoodTable_SQLlite>();
         //arrayOfUsers=ItemArray.AddItem(ItemName);
-        arrayOfUsers=ItemArray.getUsers();
+        arrayOfUsers=datasource.getAllComments();
         // Create the adapter to convert the array to views
         CustomItemAdapter adapter = new CustomItemAdapter(this, arrayOfUsers);
         // Attach the adapter to a ListView
@@ -103,7 +114,7 @@ public class FoodSummary extends Activity {
     public void usedClick (View v) {
             ListView lv = (ListView) findViewById(R.id.lvUsers);
             int position = lv.getPositionForView(v);
-            ItemArray.RemoveItem(position);
+            //ItemArray.RemoveItem(position);
         Toast.makeText(
                 getApplicationContext(),
                 "Food used", Toast.LENGTH_SHORT)
@@ -114,7 +125,7 @@ public class FoodSummary extends Activity {
     public void wastedClick (View v) {
         ListView lv = (ListView) findViewById(R.id.lvUsers);
         int position = lv.getPositionForView(v);
-        ItemArray.RemoveItem(position);
+        //ItemArray.RemoveItem(position);
         Toast.makeText(
                 getApplicationContext(),
                 "Food wasted", Toast.LENGTH_SHORT)
