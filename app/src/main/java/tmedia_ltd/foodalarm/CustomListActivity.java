@@ -26,7 +26,7 @@ public class CustomListActivity extends Activity {
         // Construct the data source
         List<FoodItem> arrayOfUsers = new ArrayList<FoodItem>();
         //arrayOfUsers=ItemArray.AddItem(ItemName);
-        arrayOfUsers=datasource.getAllContacts();
+        arrayOfUsers=datasource.getExpiringSoon(2);
         // Create the adapter to convert the array to views
         CustomItemAdapter adapter = new CustomItemAdapter(this, arrayOfUsers);
         // Attach the adapter to a ListView

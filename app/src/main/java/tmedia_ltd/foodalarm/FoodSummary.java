@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +28,8 @@ public class FoodSummary extends Activity {
     CustomItemAdapter adapter;
     private PendingIntent pendingIntent;
     DBHelper mydb;
+    List<FoodItem> arrayOfUsers;
+    String lastFilter;
 
     NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
 
@@ -34,6 +38,8 @@ public class FoodSummary extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_summary);
+        if (lastFilter!="all" && lastFilter!="week" && lastFilter!="month")
+            lastFilter="soon";
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 18);
@@ -56,7 +62,14 @@ public class FoodSummary extends Activity {
 
         //boolean itemInserted = mydb.insertContact("test","test","test","test");
         //Log.d("Item inserted?",Boolean.toString(itemInserted));
-        List<FoodItem> arrayOfUsers = mydb.getAllContacts();
+        if (lastFilter.equals("soon"))
+            arrayOfUsers = mydb.getExpiringSoon(2);
+        else if (lastFilter.equals("week"))
+            arrayOfUsers = mydb.getExpiringSoon(7);
+        else if (lastFilter.equals("month"))
+            arrayOfUsers = mydb.getExpiringSoon(30);
+        else
+            arrayOfUsers = mydb.getAllContacts();
 
         // use the SimpleCursorAdapter to show the
         // elements in a ListView
@@ -102,9 +115,15 @@ public class FoodSummary extends Activity {
     private void populateItemList() {
         // Construct the data source
         String ItemName = new String();
-        List<FoodItem> arrayOfUsers;
         //arrayOfUsers=ItemArray.AddItem(ItemName);
-        arrayOfUsers=mydb.getAllContacts();
+        if (lastFilter.equals("soon"))
+            arrayOfUsers = mydb.getExpiringSoon(2);
+        else if (lastFilter.equals("week"))
+            arrayOfUsers = mydb.getExpiringSoon(7);
+        else if (lastFilter.equals("month"))
+            arrayOfUsers = mydb.getExpiringSoon(30);
+        else
+            arrayOfUsers = mydb.getAllContacts();
         // Create the adapter to convert the array to views
         CustomItemAdapter adapter = new CustomItemAdapter(this, arrayOfUsers);
         // Attach the adapter to a ListView
@@ -113,26 +132,76 @@ public class FoodSummary extends Activity {
     }
 
     public void usedClick (View v) {
-            ListView lv = (ListView) findViewById(R.id.lvUsers);
-            int position = lv.getPositionForView(v);
-            //ItemArray.RemoveItem(position);
+        RelativeLayout vwParentRow = (RelativeLayout)v.getParent();
+        //ItemArray.RemoveItem(position);
+        Button IDButton= (Button) vwParentRow.findViewById(R.id.idButton);
+        //int position = lv.getPositionForView(v);
+        int position = Integer.parseInt(IDButton.getText().toString());
+        mydb.ExpireItem(position, "Used", System.currentTimeMillis());
+        //mydb.deleteContact(position);
         Toast.makeText(
                 getApplicationContext(),
                 "Food used", Toast.LENGTH_SHORT)
                 .show();
-            adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
+        Intent myIntent = new Intent(v.getContext(), FoodSummary.class);
+        startActivityForResult(myIntent, 0);
     }
 
     public void wastedClick (View v) {
-        ListView lv = (ListView) findViewById(R.id.lvUsers);
-        int position = lv.getPositionForView(v);
+        RelativeLayout vwParentRow = (RelativeLayout)v.getParent();
         //ItemArray.RemoveItem(position);
+        Button IDButton= (Button) vwParentRow.findViewById(R.id.idButton);
+        //int position = lv.getPositionForView(v);
+        int position = Integer.parseInt(IDButton.getText().toString());
+        mydb.ExpireItem(position,"Wasted",System.currentTimeMillis());
+        //mydb.deleteContact(position);
         Toast.makeText(
                 getApplicationContext(),
                 "Food wasted", Toast.LENGTH_SHORT)
                 .show();
         adapter.notifyDataSetChanged();
+        Intent myIntent = new Intent(v.getContext(), FoodSummary.class);
+        startActivityForResult(myIntent, 0);
+        //Log.d("DB position:", String.valueOf(position));
     }
+
+    public void weekClick (View v) {
+        List<FoodItem> arrayOfUsers;
+        arrayOfUsers=mydb.getExpiringSoon(7);
+        lastFilter="week";
+        CustomItemAdapter adapter = new CustomItemAdapter(this, arrayOfUsers);
+        // Attach the adapter to a ListView
+        ListView listView = (ListView) findViewById(R.id.lvUsers);
+        listView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
+
+    public void monthClick (View v) {
+        arrayOfUsers=mydb.getExpiringSoon(30);
+        lastFilter="month";
+        CustomItemAdapter adapter = new CustomItemAdapter(this, arrayOfUsers);
+        // Attach the adapter to a ListView
+        ListView listView = (ListView) findViewById(R.id.lvUsers);
+        listView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
+
+    public void allClick (View v) {
+        arrayOfUsers=mydb.getAllContacts();
+        lastFilter="all";
+        CustomItemAdapter adapter = new CustomItemAdapter(this, arrayOfUsers);
+        // Attach the adapter to a ListView
+        ListView listView = (ListView) findViewById(R.id.lvUsers);
+        listView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
+
+    public void trackerclick (View v) {
+        Intent myIntent=new Intent(v.getContext(),ChartView.class );
+        startActivityForResult(myIntent, 0);
+    }
+
 
     private void prepareListData() {
 

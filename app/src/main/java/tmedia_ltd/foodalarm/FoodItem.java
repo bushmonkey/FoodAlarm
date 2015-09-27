@@ -12,11 +12,11 @@ public class FoodItem {
     private int id;
     private String name;
     private Long expiry;
-
-
-
     private String quantity;
     private String price;
+    private int usageType;
+    private int used;
+    private Long useDate;
 
     public FoodItem(){}
 
@@ -26,6 +26,18 @@ public class FoodItem {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setUsageType(int usageType) {
+        this.usageType = usageType;
+    }
+
+    public void setUsed(int used) {
+        this.used = used;
+    }
+
+    public void setUseDate(Long useDate) {
+        this.useDate = useDate;
     }
 
     public void setExpiry(Long expiry) {
@@ -47,8 +59,16 @@ public class FoodItem {
         return formattedExpiryDate;
     }
 
+    public Long getExpiryLong() {
+        return expiry;
+    }
+
     public void setPrice(String price) {
         this.price = price;
+    }
+
+    public String getId() {
+        return String.valueOf(id);
     }
 
     public FoodItem(String name, Long expiry, String quantity, String price) {

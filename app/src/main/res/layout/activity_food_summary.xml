@@ -77,7 +77,8 @@
         android:layout_alignWithParentIfMissing="false"
         android:layout_alignParentLeft="false"
         android:layout_alignParentRight="false"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:onClick="monthClick"/>
 
     <TextView
         android:layout_width="60dp"
@@ -92,7 +93,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="false"
         android:layout_alignParentStart="false"
-        android:layout_toStartOf="@id/textView10" />
+        android:layout_toStartOf="@id/textView10"
+        android:onClick="weekClick"/>
 
 
 
@@ -109,6 +111,21 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="false"
         android:layout_toEndOf="@id/textView10"
-        android:layout_alignParentEnd="false" />
+        android:layout_alignParentEnd="false"
+        android:onClick="allClick"/>
 
-      </RelativeLayout>
+    <TextView
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:text="Tracker"
+        android:id="@+id/trackerbtn"
+        android:background="#a5abc6"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textSize="@dimen/textSize_height"
+        android:gravity="center"
+        android:onClick="trackerclick"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true" />
+
+</RelativeLayout>

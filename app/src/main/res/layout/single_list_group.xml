@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="50dp"
+    android:layout_height="45dp"
     android:orientation="vertical"
     android:screenOrientation="portrait"
     android:background="#ffffff"
@@ -33,7 +33,7 @@
     <TextView
         android:id="@+id/lblListDate"
         android:layout_width="fill_parent"
-        android:layout_height="25dp"
+        android:layout_height="20dp"
         android:textSize="@dimen/textSize_smallheight"
         android:layout_toEndOf="@id/ItemCheckBox"
         android:gravity="center|left"
@@ -86,5 +86,14 @@
             android:gravity="center"
             android:layout_toEndOf="@id/usedButton"
             android:onClick="wastedClick"/>
+        <Button android:id="@+id/idButton"
+            android:layout_height="fill_parent"
+            android:layout_width="10dp"
+            android:textSize="@dimen/textSize_height"
+            android:text=" "
+            android:background="#ff6761"
+            android:gravity="center"
+            android:layout_toEndOf="@id/wastedButton"
+            />
     </RelativeLayout>
 </RelativeLayout>
