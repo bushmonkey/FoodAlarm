@@ -1,7 +1,8 @@
 package tmedia_ltd.foodalarm;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -13,7 +14,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 
-public class ChartView extends AppCompatActivity {
+public class ChartView extends Activity {
     DBHelper mydb;
 
     @Override
@@ -25,11 +26,13 @@ public class ChartView extends AppCompatActivity {
         mydb.getWritableDatabase();
 
         ArrayList<BarEntry> entries = new ArrayList<>();
-        //entries.add(new BarEntry(mydb.numberOfRowsForUseType("Used"), 0));
-        //entries.add(new BarEntry(mydb.numberOfRowsForUseType("Wasted"), 1));
+        int NumRows = mydb.numberOfRowsForUseType("Used");
+        Log.d("number of rows:", Integer.toString(NumRows));
+        entries.add(new BarEntry(mydb.numberOfRowsForUseType("Used"), 0));
+        entries.add(new BarEntry(mydb.numberOfRowsForUseType("Wasted"), 1));
 
-        entries.add(new BarEntry(4, 0));
-        entries.add(new BarEntry(10, 1));
+        //entries.add(new BarEntry(4, 0));
+       // entries.add(new BarEntry(10, 1));
 
         BarDataSet dataset = new BarDataSet(entries, "# of items");
         ArrayList<String> labels = new ArrayList<String>();
@@ -41,7 +44,7 @@ public class ChartView extends AppCompatActivity {
         BarData data = new BarData(labels, dataset);
         chart.setData(data);
 
-        //chart.setDescription("Usage of expired items");
+        chart.setDescription(" ");
         dataset.setColors(ColorTemplate.PASTEL_COLORS);
         chart.animateY(5000);
     }

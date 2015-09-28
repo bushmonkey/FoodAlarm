@@ -88,7 +88,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public int numberOfRowsForUseType(String useType) {
         int numRows = 0;
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select COUNT(*) from ItemDetails where useType=" + useType + "", null);
+        Cursor res = db.rawQuery("select COUNT(_id) from ItemDetails where useType=" + useType + "", null);
         if (res != null) {
             res.moveToFirst();
             numRows=res.getInt(0);
@@ -113,7 +113,11 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put("used", 1);
         contentValues.put("useType", useType);
         contentValues.put("usedDate", usedDate);
-        db.update("ItemDetails", contentValues, "_id = ? ", new String[]{Integer.toString(id)});
+        db.update("ItemDetails", contentValues, "_id =" + id, null);
+
+
+        Log.d("id to expire:", Integer.toString(id));
+
         return true;
     }
 
@@ -162,7 +166,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         //hp = new HashMap();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from ItemDetails where expiry < "+ SoonLong + " order by expiry ASC", null);
+        Cursor res = db.rawQuery("select * from ItemDetails where expiry < "+ SoonLong + " and used<>1 order by expiry ASC", null);
         res.moveToFirst();
 
         // 3. go over each row, build book and add it to list
