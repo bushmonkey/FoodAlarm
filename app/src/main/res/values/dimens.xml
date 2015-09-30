@@ -8,4 +8,9 @@
     <dimen name="margin_top">15dp</dimen>
     <dimen name="textSize_height">16sp</dimen>
     <dimen name="textSize_smallheight">12sp</dimen>
+
+    <dimen name="carddemo_keyline_1">16dp</dimen>
+    <dimen name="carddemo_keyline_1_minus_8dp">8dp</dimen>
+    <dimen name="carddemo_keyline_margin">16dp</dimen>
+
 </resources>
