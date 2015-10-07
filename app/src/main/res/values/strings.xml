@@ -8,4 +8,5 @@
     <string name="header_title_subtitle_cardwithlist">Test subtitle</string>
     <string name="header_title_group5">Test title</string>
     <string name="carddemo_title_carwithlist_card">Card Title</string>
+    <string name="title_activity_activity_card_main">Food cupboard</string>
 </resources>

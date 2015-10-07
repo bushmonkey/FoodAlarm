@@ -19,7 +19,7 @@
             android:id="@+id/carddemo_weather_city"
             android:textColor="@color/demo_card_weather_city_color"
             android:textSize="17sp"
-            tools:text="London"
+
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
             android:textColor="@color/demo_card_weather_temperature_color"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="16°C"
+
             android:layout_centerInParent="true"
             android:textSize="28sp"
             android:layout_alignParentRight="true"/>

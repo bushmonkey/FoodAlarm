@@ -28,14 +28,14 @@ import android.view.ViewGroup;
 
 import it.gmariotti.cardslib.library.view.CardViewNative;
 import tmedia_ltd.foodalarm.R;
+import tmedia_ltd.foodalarm.cards.NativeFoodCard;
 
 //import it.gmariotti.cardslib.demo.fragment.BaseMaterialFragment;
 
 
 public abstract class NativeCardWithListFragment extends Fragment {
 
-    GoogleNowNativeWeatherCard card;
-    GoogleNowStockCardwithList card2;
+    NativeFoodCard card;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -46,7 +46,6 @@ public abstract class NativeCardWithListFragment extends Fragment {
 
     protected void setTitle(){
         int titleResId = getTitleResourceId();
-        if (titleResId != TITLE_NONE)
             getActivity().setTitle(getTitleResourceId());
     }
 
@@ -78,7 +77,8 @@ public abstract class NativeCardWithListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.demo_fragment_native_cardwithlist_card, container, false);
+        //return inflater.inflate(R.layout.demo_fragment_native_cardwithlist_card, container, false);
+        return inflater.inflate(R.layout.activity_card_view, container, false);
     }
 
     @Override
@@ -93,21 +93,13 @@ public abstract class NativeCardWithListFragment extends Fragment {
     private void initCard() {
 
         //Create a Card
-        card= new GoogleNowNativeWeatherCard(getActivity());
+        card= new NativeFoodCard(getActivity());
         card.init();
 
         //Set card in the cardView
         CardViewNative cardView = (CardViewNative) getActivity().findViewById(R.id.carddemo_weathercard);
         cardView.setCard(card);
 
-
-        //Card
-        card2 = new GoogleNowStockCardwithList(getActivity());
-        card2.init();
-
-        //Set card in the cardView
-        CardViewNative cardView2 = (CardViewNative) getActivity().findViewById(R.id.carddemo_stockcard);
-        cardView2.setCard(card2);
 
     }
 
@@ -116,8 +108,6 @@ public abstract class NativeCardWithListFragment extends Fragment {
         super.onPause();
         if (card != null)
             card.unregisterDataSetObserver();
-        if (card2 != null)
-            card2.unregisterDataSetObserver();
     }
 
 
