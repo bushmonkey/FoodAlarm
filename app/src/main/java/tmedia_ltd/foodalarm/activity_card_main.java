@@ -7,10 +7,8 @@ import android.os.Bundle;
 import java.util.ArrayList;
 
 import it.gmariotti.cardslib.library.internal.Card;
-import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
 import it.gmariotti.cardslib.library.internal.CardHeader;
 import it.gmariotti.cardslib.library.internal.CardThumbnail;
-import it.gmariotti.cardslib.library.view.CardListView;
 
 public class activity_card_main extends Activity {
 
@@ -31,6 +29,8 @@ public class activity_card_main extends Activity {
             // Create a CardHeader
             CardHeader header = new CardHeader(this);
             // Add Header to card
+
+
             header.setTitle("Angry bird: " + i);
             card.setTitle("sample title");
             card.addCardHeader(header);
@@ -42,11 +42,12 @@ public class activity_card_main extends Activity {
             cards.add(card);
         }
 
-        CardArrayAdapter mCardArrayAdapter = new CardArrayAdapter(this, cards);
+        // CardArrayAdapter mCardArrayAdapter = new CardArrayAdapter(this, cards);
 
-        CardListView listView = (CardListView) this.findViewById(R.id.myList);
-        if (listView != null) {
-            listView.setAdapter(mCardArrayAdapter);
-        }
+        // CardViewNative listView = (CardViewNative) this.findViewById(R.id.myList);
+       // if (listView != null) {
+        //    listView.set
+       //     listView.setAdapter(mCardArrayAdapter);
+       // }
     }
 }

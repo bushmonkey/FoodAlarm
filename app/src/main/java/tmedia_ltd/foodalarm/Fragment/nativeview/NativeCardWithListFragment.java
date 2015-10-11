@@ -62,14 +62,14 @@ public abstract class NativeCardWithListFragment extends Fragment {
     }
 
 
-    protected String getDocUrl() {
-        return "https://github.com/gabrielemariotti/cardslib/blob/master/doc/CARDWITHLIST.md";
-    }
+   // protected String getDocUrl() {
+     //   return "https://github.com/gabrielemariotti/cardslib/blob/master/doc/CARDWITHLIST.md";
+   // }
 
 
-    protected String getSourceUrl() {
-        return "https://github.com/gabrielemariotti/cardslib/blob/master/demo/stock/src/main/java/it/gmariotti/cardslib/demo/fragment/nativeview/CardWithListFragment.java";
-    }
+    //protected String getSourceUrl() {
+    //    return "https://github.com/gabrielemariotti/cardslib/blob/master/demo/stock/src/main/java/it/gmariotti/cardslib/demo/fragment/nativeview/CardWithListFragment.java";
+   // }
 
     public int getTitleResourceId() {
         return R.string.carddemo_title_carwithlist_card;

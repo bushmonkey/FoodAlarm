@@ -13,10 +13,10 @@ import it.gmariotti.cardslib.library.prototypes.CardWithList;
 /**
  * Created by will on 9/30/2015.
  */
-public class ListExpiry extends CardWithList {
+public abstract class ListExpiry extends CardWithList {
     public ListExpiry(Context context) {
-                super(context);
-           }
+        super(context);
+    }
 
     @Override
     protected CardHeader initCardHeader() {
@@ -29,14 +29,14 @@ public class ListExpiry extends CardWithList {
             @Override
             public void onMenuItemClick(BaseCard card, MenuItem item) {
 
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.action_add:
-                        WeatherObject w1= new WeatherObject(MyCard.this);
-                        w1.city ="Madrid";
-                        w1.temperature = 24;
-                        w1.weatherIcon = R.drawable.ic_action_sun;
-                        w1.setObjectId(w1.city);
-                        mLinearListAdapter.add(w1);
+                        //WeatherObject w1= new WeatherObject(MyCard.this);
+                        //w1.city ="Madrid";
+                        //w1.temperature = 24;
+                        //w1.weatherIcon = R.drawable.ic_action_sun;
+                        //w1.setObjectId(w1.city);
+                        // mLinearListAdapter.add(w1);
                         break;
                     case R.id.action_remove:
                         mLinearListAdapter.remove(mLinearListAdapter.getItem(0));
@@ -53,13 +53,15 @@ public class ListExpiry extends CardWithList {
 
         List<ListObject> mObjects = new ArrayList<ListObject>();
 
-        WeatherObject w1= new WeatherObject(this);
-        w1.city ="London";
-        w1.temperature = 16;
-        w1.weatherIcon = R.drawable.ic_action_cloud;
-        w1.setObjectId(w1.city);
-        mObjects.add(w1);
+        //WeatherObject w1= new WeatherObject(this);
+        //w1.city ="London";
+        //w1.temperature = 16;
+        //w1.weatherIcon = R.drawable.ic_action_cloud;
+        //w1.setObjectId(w1.city);
+        // mObjects.add("London");
 
         return mObjects;
+
     }
+}
 
