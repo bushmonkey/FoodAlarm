@@ -56,6 +56,10 @@ public class NativeFoodCard extends CardWithList {
     private View positiveAction;
     //private final static int STORAGE_PERMISSION_RC = 69;
     //private Handler mHandler;
+    EditText mDateEntryField;
+    Boolean ValidExpiryDate;
+    EditText mPriceEntryField;
+
 
     private void showToast(String message) {
         if (mToast != null) {
@@ -76,6 +80,7 @@ public class NativeFoodCard extends CardWithList {
     public NativeFoodCard(Context context) {
         super(context);
         this.context=context;
+
     }
 
     @Override
@@ -134,6 +139,8 @@ public class NativeFoodCard extends CardWithList {
 
         mydb = new DBHelper(getContext());
         mydb.getWritableDatabase();
+
+
 
         if (lastFilter.equals("soon"))
             arrayOfUsers = mydb.getExpiringSoon(2);
@@ -330,6 +337,12 @@ public class NativeFoodCard extends CardWithList {
                     }
                 }).build();
 
+        ValidExpiryDate = false;
+        mDateEntryField = (EditText) dialog.getCustomView().findViewById(R.id.DateEntry);
+        mDateEntryField.addTextChangedListener(mDateEntryWatcher);
+        mPriceEntryField = (EditText) dialog.getCustomView().findViewById(R.id.ProductPriceText);
+        mPriceEntryField.addTextChangedListener(mPriceEntryWatcher);
+
         positiveAction = dialog.getActionButton(DialogAction.POSITIVE);
         //noinspection ConstantConditions
         passwordInput = (EditText) dialog.getCustomView().findViewById(R.id.password);
@@ -362,5 +375,93 @@ public class NativeFoodCard extends CardWithList {
         positiveAction.setEnabled(false); // disabled by default
     }
 
+    private TextWatcher mDateEntryWatcher = new TextWatcher() {
 
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            String working = s.toString();
+            boolean isValid = true;
+            if (working.length()==2 && before ==0) {
+                if (Integer.parseInt(working) < 1 || Integer.parseInt(working)>31) {
+                    isValid = false;
+                } else {
+                    working+="/";
+                    mDateEntryField.setText(working);
+                    mDateEntryField.setSelection(working.length());
+                }
+            }
+            else if (working.length()==5 && before ==0) {
+                String enteredMonth = working.substring(3);
+                if (Integer.parseInt(enteredMonth) < 1 || Integer.parseInt(enteredMonth)>12) {
+                    isValid = false;
+                } else {
+                    working+="/20";
+                    mDateEntryField.setText(working);
+                    mDateEntryField.setSelection(working.length());
+                }
+            }
+            else if (working.length()==10 && before ==0) {
+                String enteredYear = working.substring(6);
+                //int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+                //if (Integer.parseInt(enteredYear) < currentYear) {
+                //     isValid = false;
+                //}
+                // else {
+                isValid = true;
+                ValidExpiryDate = true;
+                //working+="/";
+                mDateEntryField.setText(working);
+                mDateEntryField.setSelection(working.length());
+                //}
+            } else if (working.length()!=10) {
+                isValid = false;
+            }
+
+            if (!isValid) {
+                mDateEntryField.setError("Enter a valid date: dd/MM/YYYY");
+            } else {
+                mDateEntryField.setError(null);
+            }
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {}
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+    };
+
+    private TextWatcher mPriceEntryWatcher = new TextWatcher() {
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            String working = s.toString();
+            boolean isValid = true;
+            if (working.length()==0 && before ==0) {
+                working+="£";
+                mPriceEntryField.setText(working);
+                mPriceEntryField.setSelection(working.length());
+
+
+            } else if (working.length()!=0) {
+                isValid = true;
+            }
+
+            if (!isValid) {
+                mPriceEntryField.setError("Enter a valid price");
+            } else {
+                mPriceEntryField.setError(null);
+            }
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {}
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+    };
 }
