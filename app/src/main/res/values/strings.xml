@@ -8,5 +8,10 @@
     <string name="header_title_subtitle_cardwithlist">Test subtitle</string>
     <string name="header_title_group5">Test title</string>
     <string name="carddemo_title_carwithlist_card">Card Title</string>
-    <string name="title_activity_activity_card_main">Food cupboard</string>
+    <string name="title_activity_activity_card_main">Food Alarm</string>
+    <string name="CardTitle">Items in your cupboard</string>
+    <string name="SelectionHeader">What happened</string>
+    <string name="md_choose_label">Choose</string>
+    <string name="googleWifi">WifiTest</string>
+    <string name="connect">TestConnect</string>
 </resources>

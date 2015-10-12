@@ -198,7 +198,7 @@ public class AddItem extends Activity implements OnClickListener {
     }
 
     public void BackToSummary (View v) {
-        Intent myIntent=new Intent(v.getContext(),FoodSummary.class );
+        Intent myIntent=new Intent(v.getContext(),activity_card_main.class );
         startActivityForResult(myIntent,0);
     }
 

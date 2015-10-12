@@ -1,5 +1,9 @@
 apply plugin: 'com.android.application'
 
+repositories {
+    maven { url "https://jitpack.io" }
+}
+
 android {
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
@@ -24,6 +28,8 @@ android {
 dependencies {
     //Core
     compile 'com.github.gabrielemariotti.cards:cardslib-core:2.1.0'
+
+    compile 'com.afollestad.material-dialogs:core:0.8.2.0@aar'
 
     //Optional for built-in cards
     compile 'com.github.gabrielemariotti.cards:cardslib-cards:2.1.0'

@@ -99,8 +99,6 @@ public abstract class NativeCardWithListFragment extends Fragment {
         //Set card in the cardView
         CardViewNative cardView = (CardViewNative) getActivity().findViewById(R.id.carddemo_weathercard);
         cardView.setCard(card);
-
-
     }
 
     @Override

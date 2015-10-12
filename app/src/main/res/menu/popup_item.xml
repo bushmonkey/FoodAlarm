@@ -6,8 +6,8 @@
         android:orderInCategory="100"
         app:showAsAction="always" />
 
-    <item android:id="@+id/action_remove"
-        android:title="Remove"
+    <item android:id="@+id/action_popup"
+        android:title="popup"
         android:orderInCategory="101"
         app:showAsAction="always" />
 

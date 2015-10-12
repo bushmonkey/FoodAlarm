@@ -38,7 +38,7 @@ public abstract class ListExpiry extends CardWithList {
                         //w1.setObjectId(w1.city);
                         // mLinearListAdapter.add(w1);
                         break;
-                    case R.id.action_remove:
+                    case R.id.action_popup:
                         mLinearListAdapter.remove(mLinearListAdapter.getItem(0));
                         break;
                 }
