@@ -32,7 +32,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private HashMap hp;
 
     public DBHelper(Context context) {
-        super(context, DATABASE_NAME, null, 4);
+        super(context, DATABASE_NAME, null, 5);
     }
 
     @Override
@@ -85,15 +85,35 @@ public class DBHelper extends SQLiteOpenHelper {
         return numRows;
     }
 
-    public int numberOfRowsForUseType(String useType) {
-        int numRows = 0;
+    public long numberOfRowsForUseType(String useType) {
+        long numRows = 0;
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select COUNT(_id) from ItemDetails where useType=" + useType + "", null);
-        if (res != null) {
-            res.moveToFirst();
-            numRows=res.getInt(0);
-        }
+        //Cursor res = db.rawQuery("select COUNT(_id) from ItemDetails where useType=" + useType + "", null);
+        DatabaseUtils.queryNumEntries(db, "ItemDetails", "useType=?", new String[]{useType});
+
+        numRows=DatabaseUtils.queryNumEntries(db, "ItemDetails", "useType=?", new String[]{useType});
+
         return numRows;
+    }
+
+    public List<FoodItem> getExpiredByDate(String useType)
+    {
+        List<FoodItem> foodItems = new LinkedList<FoodItem>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select * from ItemDetails where used=1 and useType=?", new String[] { useType });
+        FoodItem foodItem = null;
+        if (res.moveToFirst()) {
+            do {
+                foodItem = new FoodItem();
+                foodItem.setId(Integer.parseInt(res.getString(0)));
+                foodItem.setUsageType(res.getString(res.getColumnIndex(CONTACTS_COLUMN_USETYPE)));
+                foodItem.setUseDate(res.getLong(res.getColumnIndex(CONTACTS_COLUMN_USEDDATE)));
+                foodItem.setUseDate_Date(res.getLong(res.getColumnIndex(CONTACTS_COLUMN_USEDDATE)));
+                foodItems.add(foodItem);
+                Log.d("getExpiredByDate()", foodItem.toExpiredString());
+            } while (res.moveToNext());
+        }
+        return foodItems;
     }
 
     public boolean updateContact(Integer id, String name, Long expiry, String quantity, String price) {

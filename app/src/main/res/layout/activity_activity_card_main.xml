@@ -43,7 +43,18 @@
     android:background="@drawable/background"
     android:layout_height="match_parent">
 
-    <TextView
+    <android.support.v7.widget.Toolbar
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/toolbar"
+        android:minHeight="?attr/actionBarSize"
+        android:background="#ff0000"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+    </android.support.v7.widget.Toolbar>
+
+    TextView
         android:layout_width="fill_parent"
         android:layout_height="@dimen/stack_height"
         android:text="Add item"

@@ -1,20 +1,26 @@
 package tmedia_ltd.foodalarm;
 
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 import tmedia_ltd.foodalarm.Fragment.nativeview.NativeCardWithListFragment;
 
-public class activity_card_main extends Activity {
+public class activity_card_main extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_activity_card_main);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            toolbar.setTitle(R.string.app_name);
+            setSupportActionBar(toolbar);
+        }
+
 
         if (savedInstanceState == null) {
             getFragmentManager()
@@ -26,8 +32,4 @@ public class activity_card_main extends Activity {
 
     }
 
-    public void trackerclick (View v) {
-        Intent myIntent=new Intent(v.getContext(),AddItem.class );
-        startActivityForResult(myIntent, 0);
-    }
 }

@@ -10,15 +10,13 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
-import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +24,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,15 +36,15 @@ import it.gmariotti.cardslib.library.internal.CardHeader;
 import it.gmariotti.cardslib.library.internal.base.BaseCard;
 import it.gmariotti.cardslib.library.prototypes.CardWithList;
 import it.gmariotti.cardslib.library.prototypes.LinearListView;
-import tmedia_ltd.foodalarm.AddItem;
-import tmedia_ltd.foodalarm.CustomItemAdapter;
+import tmedia_ltd.foodalarm.ChartView;
 import tmedia_ltd.foodalarm.DBHelper;
 import tmedia_ltd.foodalarm.FoodItem;
 import tmedia_ltd.foodalarm.R;
+import tmedia_ltd.foodalarm.activity_card_main;
 
 
 public class NativeFoodCard extends CardWithList {
-    CustomItemAdapter adapter;
+    //CustomItemAdapter adapter;
     DBHelper mydb;
     List<FoodItem> arrayOfUsers;
     String lastFilter;
@@ -53,13 +52,15 @@ public class NativeFoodCard extends CardWithList {
     private Toast mToast;
     private Thread mThread;
     private EditText passwordInput;
+
     private View positiveAction;
     //private final static int STORAGE_PERMISSION_RC = 69;
     //private Handler mHandler;
     EditText mDateEntryField;
     Boolean ValidExpiryDate;
     EditText mPriceEntryField;
-
+    EditText ProductNameEt;
+    Context cardContext;
 
     private void showToast(String message) {
         if (mToast != null) {
@@ -80,7 +81,7 @@ public class NativeFoodCard extends CardWithList {
     public NativeFoodCard(Context context) {
         super(context);
         this.context=context;
-
+        this.cardContext=context;
     }
 
     @Override
@@ -95,12 +96,12 @@ public class NativeFoodCard extends CardWithList {
             public void onMenuItemClick(BaseCard card, MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.action_add:
-                        Activity activity = (Activity) context;
-                        Intent myIntent = new Intent(context, AddItem.class);
-                        activity.startActivityForResult(myIntent, 0);
+                        showCustomView();
                         break;
                     case R.id.action_popup:
-                        showCustomView();
+                        Activity activity = (Activity) context;
+                        Intent myIntent = new Intent(context, ChartView.class);
+                        activity.startActivityForResult(myIntent, 0);
                         break;
                 }
 
@@ -155,7 +156,6 @@ public class NativeFoodCard extends CardWithList {
         // elements in a ListView
         //adapter = new CustomItemAdapter(getContext(), arrayOfUsers);
         //populateItemList();
-
 
 
         //Init the list
@@ -224,7 +224,7 @@ public class NativeFoodCard extends CardWithList {
         else
             arrayOfUsers = mydb.getAllContacts();
         // Create the adapter to convert the array to views
-        CustomItemAdapter adapter = new CustomItemAdapter(getContext(), arrayOfUsers);
+        //CustomItemAdapter adapter = new CustomItemAdapter(getContext(), arrayOfUsers);
         // Attach the adapter to a ListView
         //ListView listView = (ListView) findViewById(R.id.lvUsers);
         //listView.setAdapter(adapter);
@@ -277,6 +277,7 @@ public class NativeFoodCard extends CardWithList {
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         showToast("Item " + text);
                         mydb.ExpireItem(Integer.parseInt(ObjectId), text.toString(), System.currentTimeMillis());
+
                         return true; // allow selection
                     }
                 })
@@ -326,54 +327,109 @@ public class NativeFoodCard extends CardWithList {
 
     public void showCustomView() {
         MaterialDialog dialog = new MaterialDialog.Builder(getContext())
-                .title(R.string.googleWifi)
+                .title("Enter product details")
                 .customView(R.layout.dialog_customview, true)
-                .positiveText(R.string.connect)
+                .positiveText("Save")
                 .negativeText(android.R.string.cancel)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
+
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        showToast("Password: " + passwordInput.getText().toString());
+                        showToast("Item saved");
+                        Long ExpiryDateinMillis = ConvertExpiryDate(passwordInput.getText().toString());
+                        String ProductText = ProductNameEt.getText().toString();
+                        //ItemArray.AddItem(ProductText);
+                        //boolean itemInserted = mydb.insertContact(ProductText,System.currentTimeMillis(),"quantity","price");
+                        boolean itemInserted = mydb.insertContact(ProductText, ExpiryDateinMillis, "quantity", "price");
+                        Log.d("Item inserted?", Boolean.toString(itemInserted));
+                        Activity activity = (Activity) context;
+                        Intent myIntent = new Intent(context, activity_card_main.class);
+                        activity.startActivityForResult(myIntent, 0);
                     }
                 }).build();
+        ProductNameEt = (AutoCompleteTextView) dialog.getCustomView().findViewById(R.id.ProductEntry);
+
+
+                ArrayAdapter adapter = new ArrayAdapter(context,
+                android.R.layout.simple_dropdown_item_1line, COUNTRIES);
+        final AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView)
+                ProductNameEt;
+        autoCompleteTextView.setAdapter(adapter);
 
         ValidExpiryDate = false;
-        mDateEntryField = (EditText) dialog.getCustomView().findViewById(R.id.DateEntry);
-        mDateEntryField.addTextChangedListener(mDateEntryWatcher);
-        mPriceEntryField = (EditText) dialog.getCustomView().findViewById(R.id.ProductPriceText);
+        mPriceEntryField = (EditText) dialog.getCustomView().findViewById(R.id.priceEntry);
         mPriceEntryField.addTextChangedListener(mPriceEntryWatcher);
 
         positiveAction = dialog.getActionButton(DialogAction.POSITIVE);
         //noinspection ConstantConditions
-        passwordInput = (EditText) dialog.getCustomView().findViewById(R.id.password);
+       passwordInput = (EditText) dialog.getCustomView().findViewById(R.id.DateEntry);
         passwordInput.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                positiveAction.setEnabled(s.toString().trim().length() > 0);
+                String working = s.toString();
+                boolean isValid = true;
+                if (working.length()==2 && before ==0) {
+                    if (Integer.parseInt(working) < 1 || Integer.parseInt(working)>31) {
+                        isValid = false;
+                    } else {
+                        working+="/";
+                        passwordInput.setText(working);
+                        passwordInput.setSelection(working.length());
+                    }
+                }
+                else if (working.length()==5 && before ==0) {
+                    String enteredMonth = working.substring(3);
+                    if (Integer.parseInt(enteredMonth) < 1 || Integer.parseInt(enteredMonth)>12) {
+                        isValid = false;
+                    } else {
+                        working+="/20";
+                        passwordInput.setText(working);
+                        passwordInput.setSelection(working.length());
+                    }
+                }
+                else if (working.length()==10 && before ==0) {
+                    String enteredYear = working.substring(6);
+                    //int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+                    //if (Integer.parseInt(enteredYear) < currentYear) {
+                    //     isValid = false;
+                    //}
+                    // else {
+                    isValid = true;
+                    ValidExpiryDate = true;
+                    positiveAction.setEnabled(s.toString().trim().length() > 0);
+                    //working+="/";
+                    passwordInput.setText(working);
+                    passwordInput.setSelection(working.length());
+                    //}
+                } else if (working.length()!=10) {
+                    positiveAction.setEnabled(false);
+                    isValid = false;
+                }
+
+                if (!isValid) {
+                    passwordInput.setError("Enter a valid date: dd/MM/YYYY");
+                } else {
+                    passwordInput.setError(null);
+                }
+
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-            }
+            public void afterTextChanged(Editable s) {}
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
         });
 
-        // Toggling the show password CheckBox will mask or unmask the password input EditText
-        CheckBox checkbox = (CheckBox) dialog.getCustomView().findViewById(R.id.showPassword);
-        checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                passwordInput.setInputType(!isChecked ? InputType.TYPE_TEXT_VARIATION_PASSWORD : InputType.TYPE_CLASS_TEXT);
-                passwordInput.setTransformationMethod(!isChecked ? PasswordTransformationMethod.getInstance() : null);
-            }
-        });
 
         dialog.show();
         positiveAction.setEnabled(false); // disabled by default
     }
+
+
 
     private TextWatcher mDateEntryWatcher = new TextWatcher() {
 
@@ -447,6 +503,7 @@ public class NativeFoodCard extends CardWithList {
 
             } else if (working.length()!=0) {
                 isValid = true;
+                positiveAction.setEnabled(s.toString().trim().length() > 0);
             }
 
             if (!isValid) {
@@ -463,5 +520,35 @@ public class NativeFoodCard extends CardWithList {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
+    };
+
+    private Long ConvertExpiryDate(String ExpiryDate)
+    {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        formatter.setLenient(false);
+
+        ExpiryDate = ExpiryDate + " 00:00";
+        Date oldDate = null;
+        try {
+            oldDate = formatter.parse(ExpiryDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        long oldMillis = oldDate.getTime();
+
+        return oldMillis;
+    }
+
+    static final String[] COUNTRIES = new String[] {
+            "Apple","Applesauce","Asparagus","BBQ sauce","Baby food","Baby formula","Bacon","Bagels","Baked beans","Baking chocolate",
+            "Baking soda","Bananas","Basil","Bay leaves","Beer","Biscuits","Black pepper","Bread - french","Bread - wheat",
+            "Bread - white", "Broccoli","Butter","Blue cheese","Chicken breast","Green beans","Hamburger buns","Hash browns","Hotdog buns","Kidney beans","peanut butter",
+            "bell peppers","pinto beans","Refried beans","Roast beef","Cabbage","Cake mix","Candy","Sweets","Cantaloupe","Carrots","Cat food","Cauliflower","Cayenne pepper",
+            "Celery","Cereal","Chocolate","Cheddar cheese","Mozzarella cheese","Ricotta cheese","Parmesan cheese","Camembert","Brie","Cherries","Gruyere cheese","Cheese spread",
+            "Chicken strips","Whole chicken","Chili powder","Oven chips","Microwave chips","potatoes","Crisps","Chives","Cinnamon","Cocoa","Coconut","Coffee","Corn","Crackers","Cucumber",
+            "Ice cream","Pork chops","Eggs","Dog food","Fish","Flour","Garlic","onion","Grapefruit","Ham","Hamburger","Honey","Jalapenos","Jam","Jello","Ketchup","Lasagna","Pasta","Spaghetti",
+            "Lemon","Lime","Lemon juice","Lettuce","Tomato","Mayonnaise","Milk","Nectarines","Oranges","Pears","Noodles","Oil","Orange juice","Paprika","Parsley","Peaches","Peanuts","Peas",
+            "Pineapple","Pizza","Popcorn","Pretzels","Raisins","Ravioli","Rice","Sugar","Mustard","Salt","Sausage","Shrimps","Crab","Soup","Steak","Thyme","Tomato paste","Waffles","Yogurt","Zucchini"
     };
 }

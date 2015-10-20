@@ -14,9 +14,10 @@ public class FoodItem {
     private Long expiry;
     private String quantity;
     private String price;
-    private int usageType;
+    private String usageType;
     private int used;
     private Long useDate;
+    private Date useDate_Date;
 
     public FoodItem(){}
 
@@ -28,7 +29,7 @@ public class FoodItem {
         this.name = name;
     }
 
-    public void setUsageType(int usageType) {
+    public void setUsageType(String usageType) {
         this.usageType = usageType;
     }
 
@@ -44,6 +45,10 @@ public class FoodItem {
         this.expiry = expiry;
     }
 
+    public void setUseDate_Date(Long expiry) {
+        this.useDate_Date = new Date(expiry);
+    }
+
     public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
@@ -51,6 +56,8 @@ public class FoodItem {
     public String getName() {
         return name;
     }
+
+    public Date getUseDate_Date(){ return useDate_Date; }
 
     public String getExpiry() {
         Date d = new Date(expiry);
@@ -81,6 +88,9 @@ public class FoodItem {
     }
 
     //getters & setters
+    public String toExpiredString() {
+        return "FoodItem [id=" + id + ", usagetype=" + usageType + ", UseDate=" + useDate_Date.toString() + "]";
+    }
 
     @Override
     public String toString() {
