@@ -104,8 +104,8 @@ public abstract class NativeCardWithListFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        if (card != null)
-            card.unregisterDataSetObserver();
+        //if (card != null)
+//            card.unregisterDataSetObserver();
     }
 
 

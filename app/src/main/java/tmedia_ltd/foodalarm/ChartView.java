@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +14,10 @@ import android.widget.ListView;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -40,31 +44,28 @@ public class ChartView extends AppCompatActivity {
         ListView lv = (ListView) findViewById(R.id.lvCharts);
         ArrayList<ListViewChartItem> list = new ArrayList<ListViewChartItem>();
 
-
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
             toolbar.setTitle(R.string.app_name);
             setSupportActionBar(toolbar);
         }
+
         mydb = new DBHelper(this);
         mydb.getWritableDatabase();
         Float NumRows = (float) mydb.numberOfRowsForUseType("Used");
         Float NumWasted = (float) mydb.numberOfRowsForUseType("Wasted");
 
-        list.add(new PieChartItem(generateDataPie(NumRows,NumWasted), getApplicationContext()));
+        list.add(new PieChartItem(generateDataPie(NumRows,NumWasted), getApplicationContext(),"Distribution of used items"));
         list.add(new LineChartItem(generateDataLine(1), getApplicationContext()));
+        list.add(new BarChartItem(generateDataBar(1), getApplicationContext()));
+        list.add(new PieChartItem(generateDataPie(NumRows,NumWasted), getApplicationContext(), "Top 4 Most wasted items"));
+        list.add(new LineChartItem(generateDataLine(1), getApplicationContext()));
+        list.add(new BarChartItem(generateDataBar(1), getApplicationContext()));
 
         ChartDataAdapter cda = new ChartDataAdapter(getApplicationContext(), list);
         lv.setAdapter(cda);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_chart_view, menu);
-        return true;
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -104,7 +105,41 @@ public class ChartView extends AppCompatActivity {
         }
     }
 
+    private BarData generateDataBar(int cnt) {
+
+        ArrayList<BarEntry> entries = new ArrayList<BarEntry>();
+
+        for (int i = 0; i < 5; i++) {
+            entries.add(new BarEntry((int) (Math.random() * 70) + 30, i));
+        }
+
+        BarDataSet d = new BarDataSet(entries, "New DataSet " + cnt);
+        d.setBarSpacePercent(20f);
+        d.setColors(ColorTemplate.VORDIPLOM_COLORS);
+        d.setHighLightAlpha(255);
+
+        BarData cd = new BarData(getMonths(), d);
+        return cd;
+    }
+
     private PieData generateDataPie(Float NumRows, Float NumWasted){
+
+        ArrayList<Entry> entries = new ArrayList<>();
+        entries.add(new Entry(NumRows, 0));
+        entries.add(new Entry(NumWasted, 1));
+
+        PieDataSet dataset = new PieDataSet(entries,"");
+        ArrayList<String> xVals = new ArrayList<String>();
+        xVals.add("Used");
+        xVals.add("Wasted");
+        dataset.setColors(ColorTemplate.PASTEL_COLORS);
+        PieData data = new PieData(xVals,dataset);
+        data.setValueFormatter(new MyValueFormatter());
+
+        return data;
+    }
+
+    private PieData generateTop4Pie(Float NumRows, Float NumWasted){
 
         ArrayList<Entry> entries = new ArrayList<>();
         entries.add(new Entry(NumRows, 0));
@@ -151,12 +186,12 @@ public class ChartView extends AppCompatActivity {
         dataset.setColors(ColorTemplate.PASTEL_COLORS);
         chart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
 
-/*        Legend l = chart.getLegend();
+       Legend l = chart.getLegend();
         l.setPosition(Legend.LegendPosition.BELOW_CHART_RIGHT);
         l.setXEntrySpace(7f);
         l.setYEntrySpace(0f);
-        l.setYOffset(10f);*/
-
+        l.setYOffset(10f);
+        l.setEnabled(false);
         return true;
     }
 
@@ -201,15 +236,15 @@ public class ChartView extends AppCompatActivity {
             {
                 Today++;
             }
-            else if (temp.getUseDate_Date().compareTo(TodayDate)==1)
+            else if (temp.getUseDate_Date().compareTo(TodayDate)==-1)
             {
                 Yesterday++;
             }
-            else if (temp.getUseDate_Date().compareTo(TodayDate)<7)
+            else if (temp.getUseDate_Date().compareTo(TodayDate)>-7)
             {
                 LastWeek++;
             }
-            else if (temp.getUseDate_Date().compareTo(TodayDate)<31)
+            else if (temp.getUseDate_Date().compareTo(TodayDate)>-31)
             {
                 LastMonth++;
             }
@@ -236,6 +271,8 @@ public class ChartView extends AppCompatActivity {
         d1.setCircleSize(4.5f);
         d1.setHighLightColor(Color.rgb(244, 117, 117));
         d1.setDrawValues(false);
+        d1.setColor(ColorTemplate.PASTEL_COLORS[0]);
+        d1.setCircleColor(ColorTemplate.PASTEL_COLORS[0]);
 
         arrayOfUsers=mydb.getExpiredByDate("Wasted");
         Today = 0;
@@ -249,15 +286,15 @@ public class ChartView extends AppCompatActivity {
             {
                 Today++;
             }
-            else if (temp.getUseDate_Date().compareTo(TodayDate)==1)
+            else if (temp.getUseDate_Date().compareTo(TodayDate)==-1)
             {
                 Yesterday++;
             }
-            else if (temp.getUseDate_Date().compareTo(TodayDate)<7)
+            else if (temp.getUseDate_Date().compareTo(TodayDate)>-7)
             {
                 LastWeek++;
             }
-            else if (temp.getUseDate_Date().compareTo(TodayDate)<31)
+            else if (temp.getUseDate_Date().compareTo(TodayDate)>-31)
             {
                 LastMonth++;
             }
@@ -265,6 +302,7 @@ public class ChartView extends AppCompatActivity {
             {
                 Older++;
             }
+            Log.d("comparison:", (Integer.toString(temp.getUseDate_Date().compareTo(TodayDate))));
         }
 
         Entry c2e1 = new Entry(Older, 0);
@@ -282,8 +320,8 @@ public class ChartView extends AppCompatActivity {
         d2.setLineWidth(2.5f);
         d2.setCircleSize(4.5f);
         d2.setHighLightColor(Color.rgb(244, 117, 117));
-        d2.setColor(ColorTemplate.VORDIPLOM_COLORS[0]);
-        d2.setCircleColor(ColorTemplate.VORDIPLOM_COLORS[0]);
+        d2.setColor(ColorTemplate.PASTEL_COLORS[1]);
+        d2.setCircleColor(ColorTemplate.PASTEL_COLORS[1]);
         d2.setDrawValues(false);
 
         ArrayList<LineDataSet> sets = new ArrayList<LineDataSet>();

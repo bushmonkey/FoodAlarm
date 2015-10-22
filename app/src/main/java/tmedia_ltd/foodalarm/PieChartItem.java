@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.ChartData;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.formatter.PercentFormatter;
@@ -20,11 +21,12 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 public class PieChartItem extends ListViewChartItem {
 
     //private Typeface mTf;
+    private String DescriptionText;
     private SpannableString mCenterText;
 
-    public PieChartItem(ChartData<?> cd, Context c) {
+    public PieChartItem(ChartData<?> cd, Context c, String Description) {
         super(cd);
-
+        DescriptionText = Description;
         //mTf = Typeface.createFromAsset(c.getAssets(), "OpenSans-Regular.ttf");
         //mCenterText = generateCenterText();
     }
@@ -54,14 +56,14 @@ public class PieChartItem extends ListViewChartItem {
         }
 
         // apply styling
-        //holder.chart.setDescription("Food waste distribution");
+        holder.chart.setDescription(DescriptionText);
         holder.chart.setHoleRadius(52f);
         holder.chart.setTransparentCircleRadius(57f);
         //holder.chart.setCenterText(mCenterText);
        // holder.chart.setCenterTextTypeface(mTf);
         //holder.chart.setCenterTextSize(9f);
         holder.chart.setUsePercentValues(true);
-        holder.chart.setExtraOffsets(5, 10, 50, 10);
+        //holder.chart.setExtraOffsets(5, 10, 50, 10);
 
         mChartData.setValueFormatter(new PercentFormatter());
         //mChartData.setValueTypeface(mTf);
@@ -69,8 +71,9 @@ public class PieChartItem extends ListViewChartItem {
         mChartData.setValueTextColor(Color.WHITE);
         // set data
         holder.chart.setData((PieData) mChartData);
-        holder.chart.setNoDataTextDescription("");
-
+        holder.chart.setNoDataTextDescription("No data available");
+        Legend l = holder.chart.getLegend();
+        l.setEnabled(false);
         // do not forget to refresh the chart
         // holder.chart.invalidate();
         holder.chart.animateXY(900, 900);
