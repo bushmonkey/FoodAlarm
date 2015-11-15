@@ -23,6 +23,10 @@
         android:layout_width="match_parent"
         android:layout_below="@+id/toolbar" />
 
-
+    <TextView android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lvCharts"
+        android:layout_gravity="center"
+        android:text="©2015 Food Alarm"/>
 
 </RelativeLayout>

@@ -18,7 +18,7 @@ public class LineChartItem extends ListViewChartItem {
 
     private Typeface mTf;
 
-    public LineChartItem(ChartData<?> cd, Context c) {
+    public LineChartItem(ChartData<?> cd, Context c, String Description) {
         super(cd);
 
        // mTf = Typeface.createFromAsset(c.getAssets(), "OpenSans-Regular.ttf");

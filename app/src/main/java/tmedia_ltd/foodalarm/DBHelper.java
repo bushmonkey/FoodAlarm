@@ -32,7 +32,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private HashMap hp;
 
     public DBHelper(Context context) {
-        super(context, DATABASE_NAME, null, 5);
+        super(context, DATABASE_NAME, null, 6);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class DBHelper extends SQLiteOpenHelper {
         // TODO Auto-generated method stub
         db.execSQL(
                 "create table ItemDetails " +
-                        "(_id integer primary key autoincrement, name text,expiry int,quantity text, price text, used int, usedDate int, useType text)"
+                        "(_id integer primary key autoincrement, name text,expiry int,quantity text, price int, used int, usedDate int, useType text)"
         );
     }
 
@@ -51,7 +51,7 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insertContact(String name, long expiry, String quantity, String price) {
+    public boolean insertContact(String name, long expiry, String quantity, long price) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", name);
@@ -73,7 +73,7 @@ public class DBHelper extends SQLiteOpenHelper {
         foodItem.setId(Integer.parseInt(res.getString(0)));
         foodItem.setName(res.getString(res.getColumnIndex(CONTACTS_COLUMN_NAME)));
         foodItem.setExpiry(res.getLong(res.getColumnIndex(CONTACTS_COLUMN_EXPIRY)));
-        foodItem.setPrice(res.getString(res.getColumnIndex(CONTACTS_COLUMN_PRICE)));
+        foodItem.setPrice(res.getLong(res.getColumnIndex(CONTACTS_COLUMN_PRICE)));
         foodItem.setQuantity(res.getString(res.getColumnIndex(CONTACTS_COLUMN_QUANTITY)));
 
         return foodItem;
@@ -116,7 +116,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return foodItems;
     }
 
-    public boolean updateContact(Integer id, String name, Long expiry, String quantity, String price) {
+    public boolean updateContact(Integer id, String name, Long expiry, String quantity, Long price) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", name);
@@ -164,7 +164,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 foodItem.setId(Integer.parseInt(res.getString(0)));
                 foodItem.setName(res.getString(res.getColumnIndex(CONTACTS_COLUMN_NAME)));
                 foodItem.setExpiry(res.getLong(res.getColumnIndex(CONTACTS_COLUMN_EXPIRY)));
-                foodItem.setPrice(res.getString(res.getColumnIndex(CONTACTS_COLUMN_PRICE)));
+                foodItem.setPrice(res.getLong(res.getColumnIndex(CONTACTS_COLUMN_PRICE)));
                 foodItem.setQuantity(res.getString(res.getColumnIndex(CONTACTS_COLUMN_QUANTITY)));
 
                 // Add book to books
@@ -197,7 +197,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 foodItem.setId(res.getInt(res.getColumnIndex(CONTACTS_COLUMN_ID)));
                 foodItem.setName(res.getString(res.getColumnIndex(CONTACTS_COLUMN_NAME)));
                 foodItem.setExpiry(res.getLong(res.getColumnIndex(CONTACTS_COLUMN_EXPIRY)));
-                foodItem.setPrice(res.getString(res.getColumnIndex(CONTACTS_COLUMN_PRICE)));
+                foodItem.setPrice(res.getLong(res.getColumnIndex(CONTACTS_COLUMN_PRICE)));
                 foodItem.setQuantity(res.getString(res.getColumnIndex(CONTACTS_COLUMN_QUANTITY)));
 
                 // Add book to books

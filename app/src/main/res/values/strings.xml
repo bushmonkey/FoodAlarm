@@ -14,4 +14,5 @@
     <string name="md_choose_label">Choose</string>
     <string name="googleWifi">WifiTest</string>
     <string name="connect">TestConnect</string>
+    <string name="title_activity_splash">Splash</string>
 </resources>

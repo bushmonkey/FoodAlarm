@@ -23,6 +23,8 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -59,6 +61,7 @@ public class NativeFoodCard extends CardWithList {
     EditText mDateEntryField;
     Boolean ValidExpiryDate;
     EditText mPriceEntryField;
+    EditText mBarcodeEntryField;
     EditText ProductNameEt;
     Context cardContext;
 
@@ -330,6 +333,7 @@ public class NativeFoodCard extends CardWithList {
                 .title("Enter product details")
                 .customView(R.layout.dialog_customview, true)
                 .positiveText("Save")
+                .neutralText("Barcode")
                 .negativeText(android.R.string.cancel)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
 
@@ -338,17 +342,40 @@ public class NativeFoodCard extends CardWithList {
                         showToast("Item saved");
                         Long ExpiryDateinMillis = ConvertExpiryDate(passwordInput.getText().toString());
                         String ProductText = ProductNameEt.getText().toString();
+                        Double PriceText = Double.valueOf((mPriceEntryField.getText().toString()));
+
+                        //removes decimal place if present
+                        PriceText = PriceText*100;
+                        Float PriceStreamed = PriceText.floatValue();
                         //ItemArray.AddItem(ProductText);
                         //boolean itemInserted = mydb.insertContact(ProductText,System.currentTimeMillis(),"quantity","price");
-                        boolean itemInserted = mydb.insertContact(ProductText, ExpiryDateinMillis, "quantity", "price");
+                        boolean itemInserted = mydb.insertContact(ProductText, ExpiryDateinMillis, "quantity", PriceStreamed.longValue());
                         Log.d("Item inserted?", Boolean.toString(itemInserted));
                         Activity activity = (Activity) context;
                         Intent myIntent = new Intent(context, activity_card_main.class);
                         activity.startActivityForResult(myIntent, 0);
                     }
-                }).build();
-        ProductNameEt = (AutoCompleteTextView) dialog.getCustomView().findViewById(R.id.ProductEntry);
+                })
+                .onNeutral(new MaterialDialog.SingleButtonCallback(){
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        Activity activity = (Activity) context;
+                        IntentIntegrator scanIntegrator = new IntentIntegrator(activity);
+                        scanIntegrator.initiateScan();
+                    }
 
+                    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+                    //retrieve scan result
+                    IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+                        if (scanningResult != null) {
+                            //we have a result
+                            String scanContent = scanningResult.getContents();
+                            String scanFormat = scanningResult.getFormatName();
+                        }
+                    }
+                })
+                .build();
+        ProductNameEt = (AutoCompleteTextView) dialog.getCustomView().findViewById(R.id.ProductEntry);
 
                 ArrayAdapter adapter = new ArrayAdapter(context,
                 android.R.layout.simple_dropdown_item_1line, COUNTRIES);
@@ -428,8 +455,6 @@ public class NativeFoodCard extends CardWithList {
         dialog.show();
         positiveAction.setEnabled(false); // disabled by default
     }
-
-
 
     private TextWatcher mDateEntryWatcher = new TextWatcher() {
 

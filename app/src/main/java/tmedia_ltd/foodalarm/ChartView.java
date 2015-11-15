@@ -56,11 +56,9 @@ public class ChartView extends AppCompatActivity {
         Float NumWasted = (float) mydb.numberOfRowsForUseType("Wasted");
 
         list.add(new PieChartItem(generateDataPie(NumRows,NumWasted), getApplicationContext(),"Distribution of used items"));
-        list.add(new LineChartItem(generateDataLine(1), getApplicationContext()));
-        list.add(new BarChartItem(generateDataBar(1), getApplicationContext()));
-        list.add(new PieChartItem(generateDataPie(NumRows,NumWasted), getApplicationContext(), "Top 4 Most wasted items"));
-        list.add(new LineChartItem(generateDataLine(1), getApplicationContext()));
-        list.add(new BarChartItem(generateDataBar(1), getApplicationContext()));
+        list.add(new LineChartItem(generateDataLine(1), getApplicationContext(),"Number of items wasted"));
+        list.add(new BarChartItem(generateDataBar(1), getApplicationContext(),"Money saved"));
+        list.add(new PieChartItem(generateDataPie(NumRows,NumWasted), getApplicationContext(),"Top 4 Most wasted items"));
 
         ChartDataAdapter cda = new ChartDataAdapter(getApplicationContext(), list);
         lv.setAdapter(cda);
@@ -113,7 +111,7 @@ public class ChartView extends AppCompatActivity {
             entries.add(new BarEntry((int) (Math.random() * 70) + 30, i));
         }
 
-        BarDataSet d = new BarDataSet(entries, "New DataSet " + cnt);
+        BarDataSet d = new BarDataSet(entries, "");
         d.setBarSpacePercent(20f);
         d.setColors(ColorTemplate.VORDIPLOM_COLORS);
         d.setHighLightAlpha(255);

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -18,7 +19,7 @@ public class BarChartItem extends ListViewChartItem {
 
     private Typeface mTf;
 
-    public BarChartItem(ChartData<?> cd, Context c) {
+    public BarChartItem(ChartData<?> cd, Context c, String Description) {
         super(cd);
 
        // mTf = Typeface.createFromAsset(c.getAssets(), "OpenSans-Regular.ttf");
@@ -49,7 +50,7 @@ public class BarChartItem extends ListViewChartItem {
         }
 
         // apply styling
-        holder.chart.setDescription("");
+        holder.chart.setDescription("Money waste trend");
         holder.chart.setDrawGridBackground(false);
         holder.chart.setDrawBarShadow(false);
 
@@ -63,12 +64,12 @@ public class BarChartItem extends ListViewChartItem {
        // leftAxis.setTypeface(mTf);
         leftAxis.setLabelCount(5, false);
         leftAxis.setSpaceTop(20f);
-
         YAxis rightAxis = holder.chart.getAxisRight();
         //rightAxis.setTypeface(mTf);
         rightAxis.setLabelCount(5, false);
         rightAxis.setSpaceTop(20f);
-
+        Legend l = holder.chart.getLegend();
+        l.setEnabled(false);
         //mChartData.setValueTypeface(mTf);
 
         // set data

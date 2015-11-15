@@ -13,7 +13,7 @@ public class FoodItem {
     private String name;
     private Long expiry;
     private String quantity;
-    private String price;
+    private Long price;
     private String usageType;
     private int used;
     private Long useDate;
@@ -70,7 +70,7 @@ public class FoodItem {
         return expiry;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Long price) {
         this.price = price;
     }
 
@@ -78,7 +78,7 @@ public class FoodItem {
         return String.valueOf(id);
     }
 
-    public FoodItem(String name, Long expiry, String quantity, String price) {
+    public FoodItem(String name, Long expiry, String quantity, Long price) {
         super();
         this.name = name;
 
