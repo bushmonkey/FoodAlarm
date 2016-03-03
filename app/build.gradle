@@ -7,19 +7,20 @@ repositories {
 android {
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
-
     defaultConfig {
         applicationId "tmedia_ltd.foodalarm"
         minSdkVersion 19
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        versionName '1.1'
+        versionCode 2
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    productFlavors {
     }
 }
 
@@ -28,21 +29,15 @@ android {
 dependencies {
     //Core
     compile 'com.github.gabrielemariotti.cards:cardslib-core:2.1.0'
-
     compile 'com.afollestad.material-dialogs:core:0.8.2.0@aar'
-
     //Optional for built-in cards
     compile 'com.github.gabrielemariotti.cards:cardslib-cards:2.1.0'
-
     //Optional for RecyclerView
     compile 'com.github.gabrielemariotti.cards:cardslib-recyclerview:2.1.0'
-
     //Optional for staggered grid view
     compile 'com.github.gabrielemariotti.cards:cardslib-extra-staggeredgrid:2.1.0'
-
     //Optional for drag and drop
     compile 'com.github.gabrielemariotti.cards:cardslib-extra-dragdrop:2.1.0'
-
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:cardview-v7:21.0.+'

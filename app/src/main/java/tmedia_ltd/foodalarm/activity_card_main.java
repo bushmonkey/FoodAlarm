@@ -15,6 +15,8 @@ public class activity_card_main extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_activity_card_main);
 
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
             toolbar.setTitle(R.string.app_name);
@@ -30,6 +32,9 @@ public class activity_card_main extends AppCompatActivity {
                     .commit();
         }
 
+
     }
+
+
 
 }
