@@ -93,6 +93,6 @@
     <TextView android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="©2015 Food Alarm"/>
+        android:text="©2016 Food Alarm"/>
 
 </LinearLayout>

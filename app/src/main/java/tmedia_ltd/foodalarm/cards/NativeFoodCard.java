@@ -342,6 +342,7 @@ public class NativeFoodCard extends CardWithList {
                         showToast("Item saved");
                         Long ExpiryDateinMillis = ConvertExpiryDate(passwordInput.getText().toString());
                         String ProductText = ProductNameEt.getText().toString();
+
                         Double PriceText = Double.valueOf((mPriceEntryField.getText().toString()));
 
                         //removes decimal place if present
@@ -362,6 +363,7 @@ public class NativeFoodCard extends CardWithList {
                         Activity activity = (Activity) context;
                         IntentIntegrator scanIntegrator = new IntentIntegrator(activity);
                         scanIntegrator.initiateScan();
+
                     }
 
                     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
