@@ -29,6 +29,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String CONTACTS_COLUMN_USED = "used";
     public static final String CONTACTS_COLUMN_USEDDATE = "usedDate";
     public static final String CONTACTS_COLUMN_USETYPE = "useType";
+    public static final String CONTACTS_COLUMN_BARCODE= "barcode";
     private HashMap hp;
 
     public DBHelper(Context context) {
@@ -40,7 +41,7 @@ public class DBHelper extends SQLiteOpenHelper {
         // TODO Auto-generated method stub
         db.execSQL(
                 "create table ItemDetails " +
-                        "(_id integer primary key autoincrement, name text,expiry int,quantity text, price int, used int, usedDate int, useType text)"
+                        "(_id integer primary key autoincrement, name text,expiry int,quantity text, price int, used int, usedDate int, useType text, barcode text)"
         );
     }
 
@@ -51,7 +52,7 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insertContact(String name, long expiry, String quantity, long price) {
+    public boolean insertContact(String name, long expiry, String quantity, long price, String scanContent) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", name);
@@ -59,6 +60,7 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put("quantity", quantity);
         contentValues.put("price", price);
         contentValues.put("used", 0);
+        contentValues.put("barcode", scanContent);
         db.insert("ItemDetails", null, contentValues);
         Log.d("values inserted:", contentValues.toString());
         return true;

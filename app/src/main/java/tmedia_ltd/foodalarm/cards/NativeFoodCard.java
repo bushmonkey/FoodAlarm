@@ -55,6 +55,8 @@ public class NativeFoodCard extends CardWithList {
     private Thread mThread;
     private EditText passwordInput;
 
+    private String scanContent;
+
     private View positiveAction;
     //private final static int STORAGE_PERMISSION_RC = 69;
     //private Handler mHandler;
@@ -331,6 +333,7 @@ public class NativeFoodCard extends CardWithList {
     public void showCustomView() {
         MaterialDialog dialog = new MaterialDialog.Builder(getContext())
                 .title("Enter product details")
+                .autoDismiss(false)
                 .customView(R.layout.dialog_customview, true)
                 .positiveText("Save")
                 .neutralText("Barcode")
@@ -343,6 +346,8 @@ public class NativeFoodCard extends CardWithList {
                         Long ExpiryDateinMillis = ConvertExpiryDate(passwordInput.getText().toString());
                         String ProductText = ProductNameEt.getText().toString();
 
+
+
                         Double PriceText = Double.valueOf((mPriceEntryField.getText().toString()));
 
                         //removes decimal place if present
@@ -350,7 +355,7 @@ public class NativeFoodCard extends CardWithList {
                         Float PriceStreamed = PriceText.floatValue();
                         //ItemArray.AddItem(ProductText);
                         //boolean itemInserted = mydb.insertContact(ProductText,System.currentTimeMillis(),"quantity","price");
-                        boolean itemInserted = mydb.insertContact(ProductText, ExpiryDateinMillis, "quantity", PriceStreamed.longValue());
+                        boolean itemInserted = mydb.insertContact(ProductText, ExpiryDateinMillis, "quantity", PriceStreamed.longValue(), scanContent);
                         Log.d("Item inserted?", Boolean.toString(itemInserted));
                         Activity activity = (Activity) context;
                         Intent myIntent = new Intent(context, activity_card_main.class);
@@ -370,11 +375,20 @@ public class NativeFoodCard extends CardWithList {
                     //retrieve scan result
                     IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
                         if (scanningResult != null) {
+                            showToast("Item scanned");
                             //we have a result
-                            String scanContent = scanningResult.getContents();
+                            scanContent = scanningResult.getContents();
                             String scanFormat = scanningResult.getFormatName();
+                            Log.d("Item scanned?",scanningResult.getContents().toString());
                         }
                     }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback(){
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which)
+                    {Activity activity = (Activity) context;
+                        Intent myIntent = new Intent(context, activity_card_main.class);
+                        activity.startActivityForResult(myIntent, 0);}
                 })
                 .build();
         ProductNameEt = (AutoCompleteTextView) dialog.getCustomView().findViewById(R.id.ProductEntry);
