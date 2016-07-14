@@ -13,6 +13,7 @@ public class FoodItem {
     private String name;
     private Long expiry;
     private String quantity;
+    private String barcode;
     private Long price;
     private String usageType;
     private int used;
@@ -27,6 +28,10 @@ public class FoodItem {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
     }
 
     public void setUsageType(String usageType) {
@@ -56,6 +61,9 @@ public class FoodItem {
     public String getName() {
         return name;
     }
+    public String getBarcode() {
+        return barcode;
+    }
 
     public Date getUseDate_Date(){ return useDate_Date; }
 
@@ -78,13 +86,14 @@ public class FoodItem {
         return String.valueOf(id);
     }
 
-    public FoodItem(String name, Long expiry, String quantity, Long price) {
+    public FoodItem(String name, Long expiry, String quantity, Long price, String barcode) {
         super();
         this.name = name;
 
         this.expiry = expiry;
         this.quantity = quantity;
         this.price = price;
+        this.barcode = barcode;
     }
 
     //getters & setters
@@ -94,7 +103,7 @@ public class FoodItem {
 
     @Override
     public String toString() {
-        return "FoodItem [id=" + id + ", name=" + name + ", expiry=" + expiry.toString() + ", quantity=" + quantity + ", price=" + price
+        return "FoodItem [id=" + id + ", name=" + name + ", expiry=" + expiry.toString() + ", quantity=" + quantity + ", price=" + price + ", barcode=" + barcode
                 + "]";
     }
 }

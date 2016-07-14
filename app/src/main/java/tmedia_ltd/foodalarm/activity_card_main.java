@@ -9,15 +9,59 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
 
 import tmedia_ltd.foodalarm.Fragment.nativeview.NativeCardWithListFragment;
 
 public class activity_card_main extends AppCompatActivity {
 
+    DBHelper mydb;
+    private String scanContent;
+    private Toast mToast;
+    List<FoodItem> arrayOfUsers;
+    public String currentBarcode;
+    public String currentProduct;
+
+    private void showToast(String message) {
+        if (mToast != null) {
+            mToast.cancel();
+            mToast = null;
+        }
+        mToast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
+        mToast.show();
+    }
+
+    public String getCurrentBarcode(){
+        //Log.d("Getting barcode", currentBarcode);
+        return currentBarcode;
+    }
+
+    public String getProduct(){
+       return currentProduct;
+    }
+
+    public void resetProduct(){
+        currentProduct="";
+    }
+
+    public void resetBarcode(){
+        currentBarcode="";
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        currentBarcode="";
+        currentProduct="new";
+        List<FoodItem> arrayOfUsers = new LinkedList<FoodItem>();
+
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_activity_card_main);
@@ -45,6 +89,34 @@ public class activity_card_main extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         //SetAlarm(activity_card_main.this);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+
+
+        //retrieve scan result
+        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+        scanContent = scanningResult.getContents().toString();
+        showToast("item scanned: "+scanContent);
+        Log.d("Item scanned?", scanContent);
+        RetrieveBarcodeDetails(scanContent);
+    }
+
+    public void RetrieveBarcodeDetails(String barcode)
+    {
+        mydb = new DBHelper(this);
+        mydb.getWritableDatabase();
+        Log.d("checking barcode:", barcode);
+        arrayOfUsers = mydb.getByBarcode(barcode);
+        //Log.d("BarcodeInserted: ", arrayOfUsers.get(0).getName().toString());
+        //currentBarcode=arrayOfUsers.get(0).getName().toString();
+        //final EditText ProductEntered = (EditText) dialog.getCustomView().findViewById(R.id.ProductEntry);
+        //ProductEntered.setText(arrayOfUsers.get(0).getName());
+        for (FoodItem temp : arrayOfUsers) {
+            currentProduct = temp.getName();
+        }
+        currentBarcode=barcode;
     }
 
     public void SetAlarm(Context context)

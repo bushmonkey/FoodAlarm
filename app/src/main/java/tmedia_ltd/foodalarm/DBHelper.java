@@ -77,7 +77,7 @@ public class DBHelper extends SQLiteOpenHelper {
         foodItem.setExpiry(res.getLong(res.getColumnIndex(CONTACTS_COLUMN_EXPIRY)));
         foodItem.setPrice(res.getLong(res.getColumnIndex(CONTACTS_COLUMN_PRICE)));
         foodItem.setQuantity(res.getString(res.getColumnIndex(CONTACTS_COLUMN_QUANTITY)));
-
+        foodItem.setBarcode(res.getString(res.getColumnIndex(CONTACTS_COLUMN_BARCODE)));
         return foodItem;
     }
 
@@ -111,6 +111,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 foodItem.setUsageType(res.getString(res.getColumnIndex(CONTACTS_COLUMN_USETYPE)));
                 foodItem.setUseDate(res.getLong(res.getColumnIndex(CONTACTS_COLUMN_USEDDATE)));
                 foodItem.setUseDate_Date(res.getLong(res.getColumnIndex(CONTACTS_COLUMN_USEDDATE)));
+                foodItem.setBarcode(res.getString(res.getColumnIndex(CONTACTS_COLUMN_BARCODE)));
                 foodItems.add(foodItem);
                 Log.d("getExpiredByDate()", foodItem.toExpiredString());
             } while (res.moveToNext());
@@ -118,13 +119,38 @@ public class DBHelper extends SQLiteOpenHelper {
         return foodItems;
     }
 
-    public boolean updateContact(Integer id, String name, Long expiry, String quantity, Long price) {
+    public List<FoodItem> getByBarcode(String barcode)
+    {
+        Log.d("Getting barcode", "new barcode");
+        List<FoodItem> foodItems = new LinkedList<FoodItem>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select * from ItemDetails where barcode=? LIMIT 1", new String[] { barcode });
+        //Cursor res = db.rawQuery("select * from ItemDetails", new String[] { barcode });
+        FoodItem foodItem = null;
+        if (res.moveToFirst()) {
+            do {
+                foodItem = new FoodItem();
+                foodItem.setId(Integer.parseInt(res.getString(0)));
+                foodItem.setName(res.getString(res.getColumnIndex(CONTACTS_COLUMN_NAME)));
+                foodItem.setExpiry(res.getLong(res.getColumnIndex(CONTACTS_COLUMN_EXPIRY)));
+                foodItem.setPrice(res.getLong(res.getColumnIndex(CONTACTS_COLUMN_PRICE)));
+                foodItem.setQuantity(res.getString(res.getColumnIndex(CONTACTS_COLUMN_QUANTITY)));
+                foodItem.setBarcode(res.getString(res.getColumnIndex(CONTACTS_COLUMN_BARCODE)));
+                foodItems.add(foodItem);
+                Log.d("getByBarcode()", foodItem.toExpiredString());
+            } while (res.moveToNext());
+        }
+        return foodItems;
+    }
+
+    public boolean updateContact(Integer id, String name, Long expiry, String quantity, Long price, String barcode) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", name);
         contentValues.put("expiry", expiry);
         contentValues.put("quantity", quantity);
         contentValues.put("price", price);
+        contentValues.put("barcode", barcode);
         db.update("ItemDetails", contentValues, "_id = ? ", new String[]{Integer.toString(id)});
         return true;
     }
@@ -168,7 +194,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 foodItem.setExpiry(res.getLong(res.getColumnIndex(CONTACTS_COLUMN_EXPIRY)));
                 foodItem.setPrice(res.getLong(res.getColumnIndex(CONTACTS_COLUMN_PRICE)));
                 foodItem.setQuantity(res.getString(res.getColumnIndex(CONTACTS_COLUMN_QUANTITY)));
-
+                foodItem.setBarcode(res.getString(res.getColumnIndex(CONTACTS_COLUMN_BARCODE)));
                 // Add book to books
                 foodItems.add(foodItem);
             } while (res.moveToNext());
@@ -201,7 +227,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 foodItem.setExpiry(res.getLong(res.getColumnIndex(CONTACTS_COLUMN_EXPIRY)));
                 foodItem.setPrice(res.getLong(res.getColumnIndex(CONTACTS_COLUMN_PRICE)));
                 foodItem.setQuantity(res.getString(res.getColumnIndex(CONTACTS_COLUMN_QUANTITY)));
-
+                foodItem.setBarcode(res.getString(res.getColumnIndex(CONTACTS_COLUMN_BARCODE)));
                 // Add book to books
                 foodItems.add(foodItem);
             } while (res.moveToNext());
