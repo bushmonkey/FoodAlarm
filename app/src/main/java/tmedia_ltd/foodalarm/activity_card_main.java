@@ -5,6 +5,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -28,6 +29,9 @@ public class activity_card_main extends AppCompatActivity {
     List<FoodItem> arrayOfUsers;
     public String currentBarcode;
     public String currentProduct;
+    public static String SharedBarcode;
+
+
 
     private void showToast(String message) {
         if (mToast != null) {
@@ -59,7 +63,7 @@ public class activity_card_main extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         currentBarcode="";
-        currentProduct="new";
+        //currentProduct="";
         List<FoodItem> arrayOfUsers = new LinkedList<FoodItem>();
 
         // TODO Auto-generated method stub
@@ -84,6 +88,8 @@ public class activity_card_main extends AppCompatActivity {
 
         SetAlarm(activity_card_main.this);
 
+        SharedPreferences settings = getSharedPreferences("session", getApplicationContext().MODE_PRIVATE);
+
     }
 
     public void onResume() {
@@ -97,10 +103,43 @@ public class activity_card_main extends AppCompatActivity {
 
         //retrieve scan result
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        scanContent = scanningResult.getContents().toString();
-        showToast("item scanned: "+scanContent);
-        Log.d("Item scanned?", scanContent);
-        RetrieveBarcodeDetails(scanContent);
+        if (requestCode != 20 && requestCode != 0 )
+        {
+            scanContent = scanningResult.getContents().toString();
+            showToast("item scanned: " + scanContent);
+            Log.d("Item scanned?", scanContent);
+            Log.d("requestCode", Integer.toString(requestCode));
+            RetrieveBarcodeDetails(scanContent);
+            SaveBarcodePreferences(scanContent);
+            String RetrievedProductName = getProductPreferences();
+            //Activity activity = (Activity) this;
+            Intent myIntent = new Intent(this, activity_card_main.class);
+            this.startActivityForResult(myIntent, 0);
+        }
+
+    }
+
+    private String getProductPreferences()
+    {
+        SharedPreferences preferences = getSharedPreferences("session", getApplicationContext().MODE_PRIVATE);
+        String productName = preferences.getString("productName", null);
+        return productName;
+    }
+
+    public void SaveBarcodePreferences(String barcode)
+    {
+        SharedPreferences preferences = getSharedPreferences("session",getApplicationContext().MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("sessionId", barcode);
+        editor.commit();
+    }
+
+    public void SaveProductName(String name)
+    {
+        SharedPreferences preferences = getSharedPreferences("session",getApplicationContext().MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("productName", name);
+        editor.commit();
     }
 
     public void RetrieveBarcodeDetails(String barcode)
@@ -115,6 +154,9 @@ public class activity_card_main extends AppCompatActivity {
         //ProductEntered.setText(arrayOfUsers.get(0).getName());
         for (FoodItem temp : arrayOfUsers) {
             currentProduct = temp.getName();
+        }
+        if (currentProduct != null && !currentProduct.isEmpty()) {
+            SaveProductName(currentProduct);
         }
         currentBarcode=barcode;
     }

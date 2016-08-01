@@ -11,8 +11,8 @@ android {
         applicationId "tmedia_ltd.foodalarm"
         minSdkVersion 19
         targetSdkVersion 22
-        versionName '3.0'
-        versionCode 8
+        versionName '4.3'
+        versionCode 12
     }
     buildTypes {
         release {

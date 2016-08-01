@@ -7,6 +7,7 @@ package tmedia_ltd.foodalarm.cards;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.text.Editable;
@@ -66,13 +67,15 @@ public class NativeFoodCard extends CardWithList {
     EditText mDateEntryField;
     Boolean ValidExpiryDate;
     EditText mPriceEntryField;
+    EditText mQuantityEntryField;
     EditText mBarcodeEntryField;
     EditText ProductNameEt;
     Context cardContext;
     public Activity activityHandle;
     activity_card_main  topActivityClass= new activity_card_main();
-
-
+    private String storedBarcode;
+    private boolean validDate;
+    private boolean validPrice;
 
     private void showToast(String message) {
         if (mToast != null) {
@@ -109,23 +112,34 @@ public class NativeFoodCard extends CardWithList {
         header.setPopupMenu(R.menu.popup_item, new CardHeader.OnClickCardHeaderPopupMenuListener() {
             @Override
             public void onMenuItemClick(BaseCard card, MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.action_add:
                         showCustomView();
                         break;
                     case R.id.action_popup:
                         Activity activity = (Activity) context;
                         Intent myIntent = new Intent(context, ChartView.class);
-                        activity.startActivityForResult(myIntent, 0);
+                        activity.startActivityForResult(myIntent, 20);
                         break;
                 }
 
             }
         });
 
+        SharedPreferences preferences = context.getSharedPreferences("session", Context.MODE_PRIVATE);
+        String popupTest = preferences.getString("popup", null);
+
+        if(popupTest != null && !popupTest.isEmpty()) {
+            if (popupTest.equals("true")) {
+                showCustomView();
+                setPopUpBoolean("false");
+            }
+        }
+
         header.setTitle("Items in your cupboard"); //should use R.string.
 
         Log.d("init card Header ", "method");
+
 
         return header;
     }
@@ -342,10 +356,11 @@ public class NativeFoodCard extends CardWithList {
     }
 
     public void showCustomView() {
-        String RetrievedProductName = topActivityClass.getProduct();
+        String RetrievedProductName = getProductPreferences();
+        //showToast("product name is " + RetrievedProductName);
         final MaterialDialog dialog = new MaterialDialog.Builder(getContext())
                 .title("Enter product details")
-                .autoDismiss(false)
+                //.autoDismiss(false)
                 .customView(R.layout.dialog_customview, true)
                 .positiveText("Save")
                 .neutralText("Barcode")
@@ -356,8 +371,10 @@ public class NativeFoodCard extends CardWithList {
                     @Override
 
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        String returnedbarcode = topActivityClass.getCurrentBarcode();
-                        //showToast("barcode is "+ returnedbarcode);
+                        String returnedBarcode = getCurrentBarcode();
+                        //showToast("barcode is "+ returnedBarcode);
+                        String RetrievedProductName = getProductPreferences();
+                        //showToast("product name is "+ RetrievedProductName);
                         //showToast("Item saved");
                         Long ExpiryDateinMillis = ConvertExpiryDate(passwordInput.getText().toString());
                         String ProductText = ProductNameEt.getText().toString();
@@ -369,10 +386,10 @@ public class NativeFoodCard extends CardWithList {
                         Float PriceStreamed = PriceText.floatValue();
                         //ItemArray.AddItem(ProductText);
                         //boolean itemInserted = mydb.insertContact(ProductText,System.currentTimeMillis(),"quantity","price");
-                        boolean itemInserted = mydb.insertContact(ProductText, ExpiryDateinMillis, "quantity", PriceStreamed.longValue(), returnedbarcode);
+                        boolean itemInserted = mydb.insertContact(ProductText, ExpiryDateinMillis, "quantity", PriceStreamed.longValue(), returnedBarcode);
                         Log.d("Item inserted?", Boolean.toString(itemInserted));
                         topActivityClass.resetProduct();
-                        topActivityClass.resetBarcode();
+                        resetCurrentBarcode();
                         Activity activity = (Activity) context;
                         Intent myIntent = new Intent(context, activity_card_main.class);
                         activity.startActivityForResult(myIntent, 0);
@@ -381,35 +398,17 @@ public class NativeFoodCard extends CardWithList {
                 .onNeutral(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        setProductDetails(ProductNameEt.getText().toString(),passwordInput.getText().toString(),mQuantityEntryField.getText().toString(),mPriceEntryField.getText().toString());
+                        setPopUpBoolean("true");
                         Activity activity = (Activity) context;
                         IntentIntegrator scanIntegrator = new IntentIntegrator(activity);
                         scanIntegrator.initiateScan();
 
-                        //Intent myIntent = new Intent("com.google.zxing.client.android.SCAN");
-                        //myIntent.putExtra("SCAN_MODE", "QR_CODE_MODE,PRODUCT_MODE");
-                        //activity.startActivityForResult(myIntent, 10);
-                        Log.d("Barcode starting: ", arrayOfUsers.get(0).getName().toString());
-                        //activity.startActivityForResult(myIntent, 10);
+                        //Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+                        //intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
+                       // activity.startActivityForResult(intent, 10);
 
-/*                        public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-                            showToast("Item scanned");
-
-                            //retrieve scan result
-                            IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-                            Log.d("Item scanned?", scanningResult.getContents().toString());
-                            if (scanningResult != null) {
-                                showToast("Item scanned");
-                                //we have a result
-                                scanContent = scanningResult.getContents();
-                                String scanFormat = scanningResult.getFormatName();
-                                Log.d("Item scanned?",scanningResult.getContents().toString());
-                                arrayOfUsers = mydb.getByBarcode(scanningResult.getContents().toString());
-                                Log.d("Barcode2: ", arrayOfUsers.get(0).getName().toString());
-                                //final EditText ProductEntered = (EditText) dialog.getCustomView().findViewById(R.id.ProductEntry);
-                                //ProductEntered.setText(arrayOfUsers.get(0).getName());
-                            }
-                        }*/
-                        //Log.d("Barcode: ", arrayOfUsers.get(0).getName().toString());
+                       // Log.d("Barcode starting: ", arrayOfUsers.get(0).getName().toString());
                     }
 
                 })
@@ -421,10 +420,14 @@ public class NativeFoodCard extends CardWithList {
                         Activity activity = (Activity) context;
                         Intent myIntent = new Intent(context, activity_card_main.class);
                         activity.startActivityForResult(myIntent, 0);
+                        resetCurrentBarcode();
                     }
                 })
                 .build();
-        RetrievedProductName = topActivityClass.getProduct();
+        //RetrievedProductName = topActivityClass.getProduct();
+        RetrievedProductName = getProductPreferences();
+
+        //showToast("product name is " + RetrievedProductName);
         final EditText ProductEntered = (EditText) dialog.getCustomView().findViewById(R.id.ProductEntry);
         ProductEntered.setText(RetrievedProductName);
         ProductNameEt = (AutoCompleteTextView) dialog.getCustomView().findViewById(R.id.ProductEntry);
@@ -439,9 +442,62 @@ public class NativeFoodCard extends CardWithList {
         mPriceEntryField = (EditText) dialog.getCustomView().findViewById(R.id.priceEntry);
         mPriceEntryField.addTextChangedListener(mPriceEntryWatcher);
 
+        mQuantityEntryField = (EditText) dialog.getCustomView().findViewById(R.id.QtyEntry);
         positiveAction = dialog.getActionButton(DialogAction.POSITIVE);
         //noinspection ConstantConditions
        passwordInput = (EditText) dialog.getCustomView().findViewById(R.id.DateEntry);
+        //getProductDetails();
+
+        SharedPreferences preferences = context.getSharedPreferences("session", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        String productName = preferences.getString("productName", null);
+        String expiryDate = preferences.getString("expiryDate", null);
+        String quantity = preferences.getString("quantity", null);
+        String price = preferences.getString("price", null);
+
+
+        if (productName!=null) {
+            final EditText ProductField = (EditText) dialog.getCustomView().findViewById(R.id.ProductEntry);
+            ProductField.setText(productName);
+        }
+
+        if (expiryDate!=null) {
+            final EditText dateField = (EditText) dialog.getCustomView().findViewById(R.id.DateEntry);
+            dateField.setText(expiryDate);
+            //positiveAction.setEnabled(true);
+            validDate = expiryDate.toString().length() == 10;
+        }
+        else
+        {
+            validDate = false;
+        }
+
+
+
+        if (quantity!=null){
+            final EditText quantityField = (EditText) dialog.getCustomView().findViewById(R.id.QtyEntry);
+            quantityField.setText(quantity);
+        }
+
+        if (price!=null) {
+            final EditText priceField = (EditText) dialog.getCustomView().findViewById(R.id.priceEntry);
+            priceField.setText(price);
+            validPrice = price.toString().length() > 0;
+        }
+        else
+        {
+            validPrice=false;
+        }
+
+        if (validDate && validPrice)
+        {
+            Log.d("save button enabled ", "because of preferences");
+            positiveAction.setEnabled(true);
+        }
+        else
+        {
+            positiveAction.setEnabled(false);
+        }
 
         passwordInput.addTextChangedListener(new TextWatcher() {
 
@@ -476,13 +532,21 @@ public class NativeFoodCard extends CardWithList {
                     // else {
                     isValid = true;
                     ValidExpiryDate = true;
-                    positiveAction.setEnabled(s.toString().trim().length() > 0);
+                    validDate = true;
+                    if (validDate && validPrice) {
+                        Log.d("button enabled"," from dateWatcher");
+                        positiveAction.setEnabled(true);
+                    } else {
+                        positiveAction.setEnabled(false);
+                    }
+                    // positiveAction.setEnabled(s.toString().trim().length() > 0);
                     //working+="/";
                     passwordInput.setText(working);
                     passwordInput.setSelection(working.length());
                     //}
                 } else if (working.length() != 10) {
                     positiveAction.setEnabled(false);
+                    validDate = false;
                     isValid = false;
                 }
 
@@ -506,7 +570,16 @@ public class NativeFoodCard extends CardWithList {
 
 
         dialog.show();
-        positiveAction.setEnabled(false); // disabled by default
+
+        if (validDate && validPrice)
+        {
+            Log.d("button enabled"," from dialog.show");
+            positiveAction.setEnabled(true);
+        }
+        else
+        {
+            positiveAction.setEnabled(false);
+        }
 
     }
 
@@ -573,17 +646,31 @@ public class NativeFoodCard extends CardWithList {
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             String working = s.toString();
-            boolean isValid = true;
-            if (working.length()==0 && before ==0) {
-                working+="£";
-                mPriceEntryField.setText(working);
-                mPriceEntryField.setSelection(working.length());
+            boolean isValid = false;
+            //if (working.length()==0) {
+                //mPriceEntryField.setText(working);
+               // mPriceEntryField.setSelection(working.length());
 
 
-            } else if (working.length()!=0) {
+            //} else
+                if (working.length()>0) {
                 isValid = true;
-                positiveAction.setEnabled(s.toString().trim().length() > 0);
-            }
+                validPrice=true;
+                if (validDate && validPrice)
+                {
+                    Log.d("button enabled"," from priceWatcher");
+                    positiveAction.setEnabled(true);
+                }
+                else
+                {
+                    positiveAction.setEnabled(false);
+                }
+               // positiveAction.setEnabled(s.toString().trim().length() > 0);
+            } else if (working.length() < 1) {
+            positiveAction.setEnabled(false);
+            validPrice = false;
+            isValid = false;
+        }
 
             if (!isValid) {
                 mPriceEntryField.setError("Enter a valid price");
@@ -619,7 +706,86 @@ public class NativeFoodCard extends CardWithList {
         return oldMillis;
     }
 
+    private String getCurrentBarcode()
+    {
+        SharedPreferences preferences = context.getSharedPreferences("session", Context.MODE_PRIVATE);
+        String sessionId = preferences.getString("sessionId", null);
+        return sessionId;
+    }
 
+    private String getProductPreferences()
+    {
+        SharedPreferences preferences = context.getSharedPreferences("session", Context.MODE_PRIVATE);
+        String productName = preferences.getString("productName", null);
+        return productName;
+    }
+
+
+    private void resetCurrentBarcode() {
+        SharedPreferences settings = context.getSharedPreferences("session", Context.MODE_PRIVATE);
+        settings.edit().clear().commit();
+    }
+
+    public void setPopUpBoolean(String name)
+    {
+        SharedPreferences preferences = context.getSharedPreferences("session", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("popup", name);
+        editor.commit();
+    }
+
+    public void setProductDetails(String productname, String ExpiryDate, String Quantity, String Price)
+    {
+        SharedPreferences preferences = context.getSharedPreferences("session", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("productName", productname);
+        editor.putString("expiryDate", ExpiryDate);
+        editor.putString("quantity", Quantity);
+        editor.putString("price", Price);
+        editor.commit();
+    }
+
+    public void getProductDetails()
+    {
+        SharedPreferences preferences = context.getSharedPreferences("session", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        String productName = preferences.getString("productName", null);
+        String expiryDate = preferences.getString("expiryDate", null);
+        String quantity = preferences.getString("quantity", null);
+        String price = preferences.getString("price", null);
+
+        Log.d("product name ", productName);
+        Log.d("expiryDate ", expiryDate);
+        Log.d("quantity ", quantity);
+        Log.d("price ", price);
+
+        if (productName!=null) {
+            final EditText ProductField = (EditText) dialog.getCustomView().findViewById(R.id.ProductEntry);
+            ProductField.setText(productName);
+        }
+
+        if (expiryDate!=null){
+            final EditText dateField = (EditText) dialog.getCustomView().findViewById(R.id.DateEntry);
+            dateField.setText(expiryDate);
+        }
+
+        if (quantity!=null){
+            final EditText quantityField = (EditText) dialog.getCustomView().findViewById(R.id.QtyEntry);
+            quantityField.setText(quantity);
+        }
+
+        if (price!=null) {
+            final EditText priceField = (EditText) dialog.getCustomView().findViewById(R.id.priceEntry);
+            priceField.setText(price);
+        }
+    }
+
+    private String getPopUpPreferences()
+    {
+        SharedPreferences preferences = context.getSharedPreferences("session", Context.MODE_PRIVATE);
+        String productName = preferences.getString("popup", null);
+        return productName;
+    }
 
     static final String[] COUNTRIES = new String[] {
             "Apple","Applesauce","Asparagus","BBQ sauce","Baby food","Baby formula","Bacon","Bagels","Baked beans","Baking chocolate",
@@ -632,8 +798,6 @@ public class NativeFoodCard extends CardWithList {
             "Lemon","Lime","Lemon juice","Lettuce","Tomato","Mayonnaise","Milk","Nectarines","Oranges","Pears","Noodles","Oil","Orange juice","Paprika","Parsley","Peaches","Peanuts","Peas",
             "Pineapple","Pizza","Popcorn","Pretzels","Raisins","Ravioli","Rice","Sugar","Mustard","Salt","Sausage","Shrimps","Crab","Soup","Steak","Thyme","Tomato paste","Waffles","Yogurt","Zucchini"
     };
-
-
 
 
 }

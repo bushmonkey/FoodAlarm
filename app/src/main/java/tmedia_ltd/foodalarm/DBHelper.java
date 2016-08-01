@@ -121,7 +121,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public List<FoodItem> getByBarcode(String barcode)
     {
-        Log.d("Getting barcode", "new barcode");
+        Log.d("Getting barcode", barcode);
         List<FoodItem> foodItems = new LinkedList<FoodItem>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("select * from ItemDetails where barcode=? LIMIT 1", new String[] { barcode });
@@ -137,7 +137,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 foodItem.setQuantity(res.getString(res.getColumnIndex(CONTACTS_COLUMN_QUANTITY)));
                 foodItem.setBarcode(res.getString(res.getColumnIndex(CONTACTS_COLUMN_BARCODE)));
                 foodItems.add(foodItem);
-                Log.d("getByBarcode()", foodItem.toExpiredString());
+                Log.d("getByBarcode()", foodItem.getName().toString());
             } while (res.moveToNext());
         }
         return foodItems;
